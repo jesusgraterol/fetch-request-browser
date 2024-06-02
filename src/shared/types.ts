@@ -36,12 +36,18 @@ type IRequestMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
  */
 type IResponseDataType = 'arrayBuffer' | 'blob' | 'formData' | 'json' | 'text';
 
+/**
+ * Response Data
+ * The format of the data that can be extracted from the Response object.
+ */
 type IResponseData<T> = T extends 'arrayBuffer' ? ArrayBuffer
   : T extends 'blob' ? Blob
     : T extends 'formData' ? FormData
       : T extends 'json' ? any
         : T extends 'text' ? string
           : never;
+
+
 
 
 
