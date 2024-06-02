@@ -1,16 +1,16 @@
-import { IRequestInfo, IRequestOptions } from './shared/types.js';
+import { IRequestInput, IRequestOptions } from './shared/types.js';
 
 /* ************************************************************************************************
  *                                         IMPLEMENTATION                                         *
  ************************************************************************************************ */
 
-const sendRequest = async (requestInfo: IRequestInfo) => {
-  const res = await fetch(resource, );
+const sendRequest = async (input: IRequestInput) => {
+  //const res = await fetch(input, );
 };
 
 
-const sendGET = (input: string | URL) => {
-  const req = new Request(input, );
+const sendGET = (input: IRequestInput) => {
+  //const req = new Request(input, );
 };
 
 
@@ -21,7 +21,7 @@ const sendGET = (input: string | URL) => {
  ************************************************************************************************ */
 export {
   // types
-  IRequestInfo,
+  IRequestInput,
   IRequestOptions,
 
   // implementation
