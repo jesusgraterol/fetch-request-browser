@@ -13,7 +13,6 @@ const r = (): Response => (<any>{
   formData: vi.fn(() => Promise.resolve()),
   json: vi.fn(() => Promise.resolve()),
   text: vi.fn(() => Promise.resolve()),
-  clone: vi.fn(() => Promise.resolve()),
 });
 
 
