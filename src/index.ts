@@ -1,4 +1,4 @@
-import { IRequestInput, IRequestOptions } from './shared/types.js';
+import { IOptions, IRequestInput, IRequestOptions } from './shared/types.js';
 
 /* ************************************************************************************************
  *                                         IMPLEMENTATION                                         *
@@ -9,7 +9,7 @@ const sendRequest = async (input: IRequestInput) => {
 };
 
 
-const sendGET = (input: IRequestInput) => {
+const sendGET = (input: IRequestInput, options: IOptions) => {
   //const req = new Request(input, );
 };
 

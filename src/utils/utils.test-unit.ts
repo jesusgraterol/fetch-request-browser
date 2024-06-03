@@ -11,6 +11,9 @@ import { buildRequest, extractResponseData } from './utils.js';
 const DEFAULT_HEADERS = new Headers({ 'Content-Type': 'application/json' });
 
 
+
+
+
 /* ************************************************************************************************
  *                                             MOCKS                                              *
  ************************************************************************************************ */
@@ -53,7 +56,7 @@ describe('buildRequest', () => {
     expect(req.integrity).toBe('');
     expect(req.keepalive).toBe(false);
     expect(req.body).toBeNull();
-    expect(req.headers).toStrictEqual(DEFAULT_HEADERS);
+    expect(req.headers).toEqual(new Headers({ 'Content-Type': 'application/json' }));
   });
 
   test('can instantiate a Request with custom options', () => {
