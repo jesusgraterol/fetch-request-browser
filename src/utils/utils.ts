@@ -12,22 +12,42 @@ import {
  ************************************************************************************************ */
 
 /**
+ * Builds the request input (URL).
+ * @param requestInput
+ * @returns URL
+ * @throws
+ * - INVALID_REQUEST_URL: if the provided input URL cannot be parsed
+ */
+const __buildRequestInput = (requestInput: IRequestInput): URL => {
+  if (requestInput instanceof URL) {
+    return requestInput;
+  }
+  try {
+    return new URL(requestInput);
+  } catch (e) {
+    throw new Error(encodeError(e, ERRORS.INVALID_REQUEST_URL));
+  }
+};
+
+/**
  * Builds the headers that will be used in the request. If none are provided, it returns the default
  * { 'Content-Type': 'application/json' }.
  * @param headers
  * @returns Headers
  * @throws
- * - INVALID_HEADERS: if invalid headers are passed in object format
+ * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
  */
-const __buildHeaders = (headers: any): Headers => {
-  if (headers instanceof Headers) {
-    return headers;
-  }
-  if (headers && typeof headers === 'object') {
-    try {
-      return new Headers(headers);
-    } catch (e) {
-      throw new Error(encodeError(e, ERRORS.INVALID_HEADERS));
+const __buildRequestHeaders = (headers: any): Headers => {
+  if (headers) {
+    if (headers instanceof Headers) {
+      return headers;
+    }
+    if (typeof headers === 'object') {
+      try {
+        return new Headers(headers);
+      } catch (e) {
+        throw new Error(encodeError(e, ERRORS.INVALID_REQUEST_HEADERS));
+      }
     }
   }
   return new Headers({ 'Content-Type': 'application/json' });
@@ -39,10 +59,10 @@ const __buildHeaders = (headers: any): Headers => {
  * @returns string | undefined
  */
 const __buildRequestBody = (body: any): string | undefined => {
-  if (body && typeof body === 'object') {
-    return JSON.stringify(body);
-  }
-  if (typeof body === 'string' && body.length) {
+  if (body) {
+    if (typeof body === 'object') {
+      return JSON.stringify(body);
+    }
     return body;
   }
   return undefined;
@@ -53,14 +73,14 @@ const __buildRequestBody = (body: any): string | undefined => {
  * @param options
  * @returns IRequestOptions
  * @throws
- * - INVALID_HEADERS: if invalid headers are passed in object format
+ * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
  */
 const __buildRequestOptions = (options: Partial<IRequestOptions> = {}): IRequestOptions => ({
   method: options.method ?? 'GET',
   mode: options.mode ?? 'cors',
   cache: options.cache ?? 'default',
   credentials: options.credentials ?? 'same-origin',
-  headers: __buildHeaders(options.headers),
+  headers: __buildRequestHeaders(options.headers),
   priority: options.priority ?? 'auto',
   redirect: options.redirect ?? 'follow',
   referrer: options.referrer ?? 'about:client',
@@ -71,10 +91,26 @@ const __buildRequestOptions = (options: Partial<IRequestOptions> = {}): IRequest
   body: __buildRequestBody(options.body),
 });
 
-
-
-
-const buildRequest = (input: IRequestInput, options: Partial<IRequestOptions>): Request => new Request(input);
+/**
+ * Builds the Request Instance based on given input and options.
+ * @param input
+ * @param options
+ * @returns Request
+ * @throws
+ * - INVALID_REQUEST_URL: if the provided input URL cannot be parsed
+ * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
+ */
+const buildRequest = (input: IRequestInput, options: Partial<IRequestOptions>): Request => {
+  try {
+    return new Request(__buildRequestInput(input), __buildRequestOptions(options));
+  } catch (e) {
+    // if it is a known error, just rethrow it. Otherwise, it is a request options error
+    if (true) {
+      throw e;
+    }
+    throw new Error(encodeError(e, ERRORS.INVALID_REQUEST_OPTIONS));
+  }
+};
 
 
 
