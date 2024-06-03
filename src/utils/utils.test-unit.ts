@@ -95,9 +95,20 @@ describe('buildRequest', () => {
       'Content-Type': 'text/html',
       Authorization: 'bearer 123456',
     });
-    const req = buildRequest('https://www.mozilla.org/favicon.ico', {
-      headers,
+    const req = buildRequest('https://www.mozilla.org/favicon.ico', { headers });
+    expect(req.headers).toStrictEqual(headers);
+  });
+
+  test('throws if the Content-Type header is not provided', () => {
+    const headers = new Headers({
+      Authorization: 'bearer 123456',
     });
+    expect(() => buildRequest('https://www.mozilla.org/favicon.ico', { headers })).toThrowError(ERRORS.MISSING_CONTENT_TYPE_HEADER);
+  });
+
+  test('headers are case insensitive', () => {
+    const headers = new Headers({ 'content-type': 'text/html' });
+    const req = buildRequest('https://www.mozilla.org/favicon.ico', { headers });
     expect(req.headers).toStrictEqual(headers);
   });
 

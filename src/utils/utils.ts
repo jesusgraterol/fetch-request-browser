@@ -6,6 +6,7 @@ import {
   IResponseData,
   IRequestOptions,
   IRequestMethod,
+  IOptions,
 } from '../shared/types.js';
 
 /* ************************************************************************************************
@@ -37,21 +38,25 @@ const __buildRequestInput = (requestInput: IRequestInput): URL => {
  * @returns Headers
  * @throws
  * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
+ * - MISSING_CONTENT_TYPE_HEADER: if the Content-Type header is not present
  */
 const __buildRequestHeaders = (headers: any): Headers => {
-  if (headers) {
-    if (headers instanceof Headers) {
-      return headers;
+  let reqHeaders: Headers;
+  if (headers && typeof headers === 'object') {
+    try {
+      reqHeaders = new Headers(headers);
+    } catch (e) {
+      throw new Error(encodeError(e, ERRORS.INVALID_REQUEST_HEADERS));
     }
-    if (typeof headers === 'object') {
-      try {
-        return new Headers(headers);
-      } catch (e) {
-        throw new Error(encodeError(e, ERRORS.INVALID_REQUEST_HEADERS));
-      }
-    }
+  } else if (headers instanceof Headers) {
+    reqHeaders = headers;
+  } else {
+    reqHeaders = new Headers({ 'Content-Type': 'application/json' });
   }
-  return new Headers({ 'Content-Type': 'application/json' });
+  if (!reqHeaders.has('Content-Type')) {
+    throw new Error(encodeError(`The provided header did not include 'Content-Type'. Received: ${Array.from(reqHeaders.keys())}`, ERRORS.MISSING_CONTENT_TYPE_HEADER));
+  }
+  return reqHeaders;
 };
 
 /**
@@ -103,6 +108,7 @@ const __buildRequestOptions = (options: Partial<IRequestOptions> = {}): IRequest
  * @throws
  * - INVALID_REQUEST_URL: if the provided input URL cannot be parsed
  * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
+ * - MISSING_CONTENT_TYPE_HEADER: if the Content-Type header is not present
  * - INVALID_REQUEST_OPTIONS: if the Request Instance cannot be instantiated due to the passed opts
  */
 const buildRequest = (input: IRequestInput, options?: Partial<IRequestOptions>): Request => {
@@ -162,6 +168,23 @@ const extractResponseData = async <T extends IResponseDataType>(
 
 
 /* ************************************************************************************************
+ *                                          MISC HELPERS                                          *
+ ************************************************************************************************ */
+
+
+const buildOptions = (options: Partial<IOptions> = {}): IOptions => ({
+  requestOptions: options.requestOptions,
+  responseDataType: options.responseDataType ?? 'json',
+  acceptableStatusCodes: options.acceptableStatusCodes,
+  acceptableStatusCodesRange: options.acceptableStatusCodesRange ?? { min: 200, max: 299 },
+  retryAttempts: options.retryAttempts ?? 0,
+  retryDelaySeconds: options.retryDelaySeconds ?? 3,
+});
+
+
+
+
+/* ************************************************************************************************
  *                                         MODULE EXPORTS                                         *
  ************************************************************************************************ */
 export {
@@ -170,4 +193,7 @@ export {
 
   // response helpers
   extractResponseData,
+
+  // misc helpers
+  buildOptions,
 };
