@@ -62,20 +62,20 @@ interface IOptions {
   requestOptions?: Partial<IRequestOptions>;
 
   // the expected data type that should be extracted from the response
-  responseDataType?: IResponseDataType;
+  responseDataType: IResponseDataType;
 
   /**
    * Response Status Codes
    * The request's response can be validated by providing a list of acceptable codes or a range
-   * object. Keep in mind the acceptableStatusCodes validation takes precedence. If provided, the
-   * acceptableStatusCodesRange validation will be ignored.
+   * object. Keep in mind that if the acceptableStatusCodes array is provided, it will only perform
+   * that validation and ignore the acceptableStatusCodesRange.
    */
 
   // the list of status codes that won't throw an error
   acceptableStatusCodes?: number[];
 
   // the range of codes that are considered to be acceptable. Defaults to: { min: 200, max: 299 }
-  acceptableStatusCodesRange?: { min: number, max: number };
+  acceptableStatusCodesRange: { min: number, max: number };
 
   /**
    * Retry
@@ -85,10 +85,10 @@ interface IOptions {
    */
 
   // the number of times it will retry the request on failure. Defaults to 0
-  retryAttempts?: number;
+  retryAttempts: number;
 
   // the number of seconds it will wait before re-sending the request. Defaults to 3
-  retryDelaySeconds?: number;
+  retryDelaySeconds: number;
 }
 
 

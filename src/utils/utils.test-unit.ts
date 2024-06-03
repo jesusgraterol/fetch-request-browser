@@ -15,7 +15,7 @@ const DEFAULT_HEADERS = new Headers({ 'Content-Type': 'application/json' });
 
 
 /* ************************************************************************************************
- *                                             MOCKS                                              *
+ *                                            HELPERS                                             *
  ************************************************************************************************ */
 
 const rs = (): Response => (<any>{
@@ -35,14 +35,6 @@ const rs = (): Response => (<any>{
  ************************************************************************************************ */
 
 describe('buildRequest', () => {
-  beforeAll(() => { });
-
-  afterAll(() => { });
-
-  beforeEach(() => { });
-
-  afterEach(() => { });
-
   test('can instantiate a Request with valid data', () => {
     const req = buildRequest('https://www.mozilla.org/favicon.ico');
     expect(req.url).toBe('https://www.mozilla.org/favicon.ico');
@@ -56,7 +48,7 @@ describe('buildRequest', () => {
     expect(req.integrity).toBe('');
     expect(req.keepalive).toBe(false);
     expect(req.body).toBeNull();
-    expect(req.headers).toEqual(new Headers({ 'Content-Type': 'application/json' }));
+    expect(req.headers).toEqual(DEFAULT_HEADERS);
   });
 
   test('can instantiate a Request with custom options', () => {
@@ -162,14 +154,6 @@ describe('buildRequest', () => {
 
 
 describe('extractResponseData', () => {
-  beforeAll(() => { });
-
-  afterAll(() => { });
-
-  beforeEach(() => { });
-
-  afterEach(() => { });
-
   test('can extract any data type', async () => {
     const res = rs();
     await extractResponseData(res, 'arrayBuffer');
@@ -212,7 +196,7 @@ describe('buildOptions', () => {
       method: 'POST',
       headers: { 'Content-Type': 'text/html' },
     };
-    const range = { min: 200, max: 299 };
+    const range = { min: 100, max: 499 };
     expect(buildOptions({
       requestOptions: reqOptions,
       responseDataType: 'text',

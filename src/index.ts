@@ -9,7 +9,7 @@ const sendRequest = async (input: IRequestInput) => {
 };
 
 
-const sendGET = (input: IRequestInput, options: IOptions) => {
+const sendGET = (input: IRequestInput, options?: Partial<IOptions>) => {
   //const req = new Request(input, );
 };
 
