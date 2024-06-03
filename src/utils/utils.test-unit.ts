@@ -123,6 +123,24 @@ describe('buildRequest', () => {
     });
     expect(req.body).toBeNull();
   });
+
+  test('throws when an invalid URL is provided', () => {
+    expect(() => buildRequest('someInvalidURL')).toThrowError(ERRORS.INVALID_REQUEST_URL);
+  });
+
+  test('throws when invalid headers are provided', () => {
+    expect(() => buildRequest(
+      'https://www.mozilla.org',
+      { headers: { 'Content Type': 'application/json' } },
+    )).toThrowError(ERRORS.INVALID_REQUEST_HEADERS);
+  });
+
+  test('throws when invalid options are provided', () => {
+    expect(() => buildRequest(
+      'https://www.mozilla.org',
+      { mode: <RequestMode>'invalid-mode' },
+    )).toThrowError(ERRORS.INVALID_REQUEST_OPTIONS);
+  });
 });
 
 
