@@ -91,6 +91,20 @@ interface IOptions {
   retryDelaySeconds: number;
 }
 
+/**
+ * Request Response
+ * The object containing the result of the Request.
+ */
+interface IRequestResponse {
+  // the Response's Headers. Useful as some service providers attach important info in the headers
+  headers: Headers;
+
+  // the data extracted from the Response Instance
+  data: any;
+}
+
+
+
 
 
 /* ************************************************************************************************
@@ -106,4 +120,5 @@ export type {
   IResponseDataType,
   IResponseData,
   IOptions,
+  IRequestResponse,
 };

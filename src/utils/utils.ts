@@ -136,6 +136,8 @@ const buildRequest = (input: IRequestInput, options?: Partial<IRequestOptions>):
  * @param res
  * @param dType
  * @returns Promise<IResponseData<T>>
+ * @throws
+ * - INVALID_RESPONSE_DTYPE: if the data type is not supported by the Response Instance
  */
 const extractResponseData = async <T extends IResponseDataType>(
   res: Response,
