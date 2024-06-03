@@ -99,7 +99,7 @@ describe('buildRequest', () => {
   });
 
   test('can include string data in the body', async () => {
-    const data = { hello: 'World!' };
+    const data = { hello: 'World!', foo: 123, baz: false };
     const req = buildRequest('https://www.mozilla.org/favicon.ico', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -108,12 +108,20 @@ describe('buildRequest', () => {
   });
 
   test('can include object data in the body', async () => {
-    const data = { hello: 'World!' };
+    const data = { hello: 'World!', foo: 123, baz: false };
     const req = buildRequest('https://www.mozilla.org/favicon.ico', {
       method: 'POST',
       body: data,
     });
     await expect(new Response(req.body).json()).resolves.toStrictEqual(data);
+  });
+
+  test('a GET request can have no body', () => {
+    const req = buildRequest('https://www.mozilla.org/favicon.ico', {
+      method: 'GET',
+      body: { hello: 'World!', foo: 123, baz: false },
+    });
+    expect(req.body).toBeNull();
   });
 });
 

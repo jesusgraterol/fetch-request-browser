@@ -18,6 +18,7 @@ type IRequestInput = string | URL;
  * utilities so the Request's body is always instantiated with a string.
  */
 interface IRequestOptions extends RequestInit {
+  method: IRequestMethod,
   body: any
 }
 

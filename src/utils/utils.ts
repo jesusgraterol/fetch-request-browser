@@ -5,6 +5,7 @@ import {
   IResponseDataType,
   IResponseData,
   IRequestOptions,
+  IRequestMethod,
 } from '../shared/types.js';
 
 /* ************************************************************************************************
@@ -75,21 +76,24 @@ const __buildRequestBody = (body: any): string | null => {
  * @throws
  * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
  */
-const __buildRequestOptions = (options: Partial<IRequestOptions> = {}): IRequestOptions => ({
-  method: options.method ?? 'GET',
-  mode: options.mode ?? 'cors',
-  cache: options.cache ?? 'default',
-  credentials: options.credentials ?? 'same-origin',
-  headers: __buildRequestHeaders(options.headers),
-  priority: options.priority ?? 'auto',
-  redirect: options.redirect ?? 'follow',
-  referrer: options.referrer ?? 'about:client',
-  referrerPolicy: options.referrerPolicy ?? 'no-referrer-when-downgrade',
-  signal: options.signal,
-  integrity: options.integrity || '',
-  keepalive: options.keepalive ?? false,
-  body: __buildRequestBody(options.body),
-});
+const __buildRequestOptions = (options: Partial<IRequestOptions> = {}): IRequestOptions => {
+  const method: IRequestMethod = options.method ?? 'GET';
+  return {
+    method,
+    mode: options.mode ?? 'cors',
+    cache: options.cache ?? 'default',
+    credentials: options.credentials ?? 'same-origin',
+    headers: __buildRequestHeaders(options.headers),
+    priority: options.priority ?? 'auto',
+    redirect: options.redirect ?? 'follow',
+    referrer: options.referrer ?? 'about:client',
+    referrerPolicy: options.referrerPolicy ?? 'no-referrer-when-downgrade',
+    signal: options.signal,
+    integrity: options.integrity || '',
+    keepalive: options.keepalive ?? false,
+    body: method === 'GET' ? null : __buildRequestBody(options.body),
+  };
+};
 
 /**
  * Builds the Request Instance based on given input and options.
