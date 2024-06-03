@@ -13,8 +13,13 @@ type IRequestInput = string | URL;
 /**
  * Request Options
  * The options that can be applied when sending a Fetch Request.
+ * IMPORTANT: the reason RequestInit is extended is because in the original type, the body property
+ * does not accept plain objects. Even though this makes sense, the body is processed in the
+ * utilities so the Request's body is always instantiated with a string.
  */
-type IRequestOptions = RequestInit;
+interface IRequestOptions extends RequestInit {
+  body: any
+}
 
 
 

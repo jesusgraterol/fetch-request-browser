@@ -1,4 +1,4 @@
-import { encodeError } from 'error-message-utils';
+import { encodeError, isEncodedError } from 'error-message-utils';
 import { ERRORS } from '../shared/errors.js';
 import {
   IRequestInput,
@@ -56,16 +56,16 @@ const __buildRequestHeaders = (headers: any): Headers => {
 /**
  * Builds the body of the request in string format.
  * @param body
- * @returns string | undefined
+ * @returns string | null
  */
-const __buildRequestBody = (body: any): string | undefined => {
+const __buildRequestBody = (body: any): string | null => {
   if (body) {
     if (typeof body === 'object') {
       return JSON.stringify(body);
     }
     return body;
   }
-  return undefined;
+  return null;
 };
 
 /**
@@ -86,7 +86,7 @@ const __buildRequestOptions = (options: Partial<IRequestOptions> = {}): IRequest
   referrer: options.referrer ?? 'about:client',
   referrerPolicy: options.referrerPolicy ?? 'no-referrer-when-downgrade',
   signal: options.signal,
-  integrity: options.integrity,
+  integrity: options.integrity || '',
   keepalive: options.keepalive ?? false,
   body: __buildRequestBody(options.body),
 });
@@ -99,13 +99,14 @@ const __buildRequestOptions = (options: Partial<IRequestOptions> = {}): IRequest
  * @throws
  * - INVALID_REQUEST_URL: if the provided input URL cannot be parsed
  * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
+ * - INVALID_REQUEST_OPTIONS: if the Request Instance cannot be instantiated due to the passed opts
  */
-const buildRequest = (input: IRequestInput, options: Partial<IRequestOptions>): Request => {
+const buildRequest = (input: IRequestInput, options?: Partial<IRequestOptions>): Request => {
   try {
     return new Request(__buildRequestInput(input), __buildRequestOptions(options));
   } catch (e) {
     // if it is a known error, just rethrow it. Otherwise, it is a request options error
-    if (true) {
+    if (isEncodedError(e)) {
       throw e;
     }
     throw new Error(encodeError(e, ERRORS.INVALID_REQUEST_OPTIONS));
