@@ -171,7 +171,11 @@ const extractResponseData = async <T extends IResponseDataType>(
  *                                          MISC HELPERS                                          *
  ************************************************************************************************ */
 
-
+/**
+ * Builds the main options object based on given args (if any).
+ * @param options
+ * @returns IOptions
+ */
 const buildOptions = (options: Partial<IOptions> = {}): IOptions => ({
   requestOptions: options.requestOptions,
   responseDataType: options.responseDataType ?? 'json',

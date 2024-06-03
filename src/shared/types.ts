@@ -67,9 +67,7 @@ interface IOptions {
   /**
    * Response Status Codes
    * The request's response can be validated by providing a list of acceptable codes or a range
-   * object. If both values are undefined, the validation will be skipped and the request
-   * won't throw an error no matter what code it receives in the response.
-   * Also, keep in mind the acceptableStatusCodes validation takes precedence. If provided, the
+   * object. Keep in mind the acceptableStatusCodes validation takes precedence. If provided, the
    * acceptableStatusCodesRange validation will be ignored.
    */
 

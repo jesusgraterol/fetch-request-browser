@@ -1,7 +1,7 @@
 import { describe, beforeAll, afterAll, beforeEach, afterEach, test, expect, vi } from 'vitest';
-import { IResponseDataType } from '../shared/types.js';
+import { IRequestOptions, IResponseDataType } from '../shared/types.js';
 import { ERRORS } from '../shared/errors.js';
-import { buildRequest, extractResponseData } from './utils.js';
+import { buildOptions, buildRequest, extractResponseData } from './utils.js';
 
 /* ************************************************************************************************
  *                                           CONSTANTS                                            *
@@ -188,5 +188,45 @@ describe('extractResponseData', () => {
 
   test('throws an error if an invalid dtype is provided', async () => {
     await expect(() => extractResponseData(rs(), <IResponseDataType>'nonsense')).rejects.toThrowError(ERRORS.INVALID_RESPONSE_DTYPE);
+  });
+});
+
+
+
+
+
+describe('buildOptions', () => {
+  test('can build the default options object', () => {
+    expect(buildOptions()).toStrictEqual({
+      requestOptions: undefined,
+      responseDataType: 'json',
+      acceptableStatusCodes: undefined,
+      acceptableStatusCodesRange: { min: 200, max: 299 },
+      retryAttempts: 0,
+      retryDelaySeconds: 3,
+    });
+  });
+
+  test('can build a custom options object', () => {
+    const reqOptions: Partial<IRequestOptions> = {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/html' },
+    };
+    const range = { min: 200, max: 299 };
+    expect(buildOptions({
+      requestOptions: reqOptions,
+      responseDataType: 'text',
+      acceptableStatusCodes: [200, 201],
+      acceptableStatusCodesRange: range,
+      retryAttempts: 3,
+      retryDelaySeconds: 5,
+    })).toStrictEqual({
+      requestOptions: reqOptions,
+      responseDataType: 'text',
+      acceptableStatusCodes: [200, 201],
+      acceptableStatusCodesRange: range,
+      retryAttempts: 3,
+      retryDelaySeconds: 5,
+    });
   });
 });
