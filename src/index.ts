@@ -19,7 +19,7 @@ import { validateResponse } from './validations/validations.js';
  ************************************************************************************************ */
 
 /**
- * Builds and sends a HTTP Request based on the provided input and options.
+ * Builds and sends an HTTP Request based on the provided input and options.
  * @param input
  * @param options?
  * @returns Promise<IRequestResponse>
