@@ -62,6 +62,23 @@ const send = async (
 
 
 /**
+ * Executes the sendGET functionality. This func is wrapped inside of the sendGET in order to allow
+ * a request to be retried.
+ * @param input
+ * @param options?
+ * @returns Promise<IRequestResponse>
+ */
+const __executeSendGET = (
+  input: IRequestInput,
+  options?: Partial<IOptions>,
+): Promise<IRequestResponse> => send(input, {
+  ...options,
+  requestOptions: {
+    ...options?.requestOptions,
+    method: 'GET',
+  },
+});
+/**
  * Builds and sends a GET HTTP Request based on the provided input and options.
  * IMPORTANT: The browser environment can be highly unreliable as the user can physically move
  * around and suffer from an intermittent Internet connection. Therefore, some GET requests are
@@ -80,16 +97,6 @@ const send = async (
  * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers are not identical
  * - INVALID_RESPONSE_DTYPE: if the data type is not supported by the Response Instance
  */
-const __sendGET = (
-  input: IRequestInput,
-  options?: Partial<IOptions>,
-): Promise<IRequestResponse> => send(input, {
-  ...options,
-  requestOptions: {
-    ...options?.requestOptions,
-    method: 'GET',
-  },
-});
 const sendGET = async (
   input: IRequestInput,
   options?: Partial<IOptions>,
@@ -97,7 +104,7 @@ const sendGET = async (
   retryDelaySeconds?: number,
 ): Promise<IRequestResponse> => {
   try {
-    return await __sendGET(input, options);
+    return await __executeSendGET(input, options);
   } catch (e) {
     // if the request should be retried, activate the delay and do so. Otherwise, rethrow the error
     if (typeof retryAttempts === 'number' && retryAttempts > 0) {
