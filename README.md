@@ -6,7 +6,7 @@ The `fetch-request-browser` package makes working with external APIs simple and 
 
 
 
-</br>
+<br />
 
 ## Getting Started
 
@@ -19,7 +19,7 @@ $ npm install -S fetch-request-browser
 
 
 
-</br>
+<br />
 
 ## Usage
 
@@ -60,7 +60,7 @@ await sendGET('https://httpbin.org/get');
 
 
 
-</br>
+<br/>
 
 ## API
 
@@ -73,7 +73,7 @@ send(
 ): Promise<IRequestResponse>
 ```
 
-</br>
+<br />
 
 Build and send a `GET` HTTP Request:
 ```typescript
@@ -85,7 +85,7 @@ sendGET(
 ): Promise<IRequestResponse>
 ```
 
-</br>
+<br />
 
 Build and send a `POST` HTTP Request:
 ```typescript
@@ -95,7 +95,7 @@ sendPOST(
 ): Promise<IRequestResponse>
 ```
 
-</br>
+<br />
 
 Build and send a `PUT` HTTP Request:
 ```typescript
@@ -105,7 +105,7 @@ sendPUT(
 ): Promise<IRequestResponse>
 ```
 
-</br>
+<br />
 
 Build and send a `PATCH` HTTP Request:
 ```typescript
@@ -115,7 +115,7 @@ sendPATCH(
 ): Promise<IRequestResponse>
 ```
 
-</br>
+<br />
 
 Build and send a `DELETE` HTTP Request:
 ```typescript
@@ -127,7 +127,7 @@ sendDELETE(
 
 
 
-<br/>
+<br />
 
 ## Built With
 
@@ -136,7 +136,7 @@ sendDELETE(
 
 
 
-<br/>
+<br />
 
 ## Running the Tests
 
@@ -152,7 +152,7 @@ $ npm run test:integration
 
 
 
-<br/>
+<br />
 
 ## License
 
@@ -162,7 +162,7 @@ $ npm run test:integration
 
 
 
-<br/>
+<br />
 
 ## Acknowledgments
 
@@ -173,7 +173,7 @@ $ npm run test:integration
 
 
 
-<br/>
+<br />
 
 ## @TODOS
 
@@ -183,7 +183,7 @@ $ npm run test:integration
 
 
 
-<br/>
+<br />
 
 ## Deployment
 
