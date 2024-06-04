@@ -186,8 +186,6 @@ describe('buildOptions', () => {
       responseDataType: 'json',
       acceptableStatusCodes: undefined,
       acceptableStatusCodesRange: { min: 200, max: 299 },
-      retryAttempts: 0,
-      retryDelaySeconds: 3,
     });
   });
 
@@ -202,15 +200,11 @@ describe('buildOptions', () => {
       responseDataType: 'text',
       acceptableStatusCodes: [200, 201],
       acceptableStatusCodesRange: range,
-      retryAttempts: 3,
-      retryDelaySeconds: 5,
     })).toStrictEqual({
       requestOptions: reqOptions,
       responseDataType: 'text',
       acceptableStatusCodes: [200, 201],
       acceptableStatusCodesRange: range,
-      retryAttempts: 3,
-      retryDelaySeconds: 5,
     });
   });
 });

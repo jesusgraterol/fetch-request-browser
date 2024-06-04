@@ -76,19 +76,6 @@ interface IOptions {
 
   // the range of codes that are considered to be acceptable. Defaults to: { min: 200, max: 299 }
   acceptableStatusCodesRange: { min: number, max: number };
-
-  /**
-   * Retry
-   * The browser environment can be highly unreliable as the user can physically move around and
-   * suffer from an intermittent Internet connection. Therefore, some GET requests are worth
-   * retrying as they could fail temporarily and prevent a view from loading.
-   */
-
-  // the number of times it will retry the request on failure. Defaults to 0
-  retryAttempts: number;
-
-  // the number of seconds it will wait before re-sending the request. Defaults to 3
-  retryDelaySeconds: number;
 }
 
 /**

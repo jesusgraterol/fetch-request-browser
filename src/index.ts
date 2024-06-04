@@ -14,7 +14,7 @@ import { validateResponse } from './validations/validations.js';
  ************************************************************************************************ */
 
 /**
- * Builds and Sends an HTTP Request based on the provided input and options.
+ * Builds and sends a HTTP Request based on the provided input and options.
  * @param input
  * @param options?
  * @returns Promise<IRequestResponse>
@@ -51,12 +51,47 @@ const send = async (
 };
 
 
-const sendGET = (input: IRequestInput, options?: Partial<IOptions>) => {
-  // const req = new Request(input, );
+/**
+ * Builds and sends a GET HTTP Request based on the provided input and options.
+ * IMPORTANT: The browser environment can be highly unreliable as the user can physically move
+ * around and suffer from an intermittent Internet connection. Therefore, some GET requests are 
+ * worth retrying as they could fail temporarily and prevent a view from loading.
+ * @param input
+ * @param options?
+ * @param retryAttempts? - the number of times it will retry the request on failure
+ * @param retryDelaySeconds? - the # of secs it will wait before re-sending the req. Defaults to 3
+ * @returns Promise<IRequestResponse>
+ * @throws
+ * - INVALID_REQUEST_URL: if the provided input URL cannot be parsed
+ * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
+ * - MISSING_CONTENT_TYPE_HEADER: if the Content-Type header is not present
+ * - INVALID_REQUEST_OPTIONS: if the Request Instance cannot be instantiated due to the passed opts
+ * - UNEXPECTED_RESPONSE_STATUS_CODE: if the code doesn't meet the requirements set in the options
+ * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers are not identical
+ * - INVALID_RESPONSE_DTYPE: if the data type is not supported by the Response Instance
+ */
+const __sendGET = (
+  input: IRequestInput,
+  options?: Partial<IOptions>,
+): Promise<IRequestResponse> => send(input, {
+  ...options,
+  requestOptions: {
+    ...options?.requestOptions,
+    method: 'GET',
+  },
+});
+const sendGET = (
+  input: IRequestInput,
+  options?: Partial<IOptions>,
+  retryAttempts?: number,
+  retryDelaySeconds?: number,
+): Promise<IRequestResponse> => {
+
 };
 
+
 /**
- * Builds and Sends a POST HTTP Request based on the provided input and options.
+ * Builds and sends a POST HTTP Request based on the provided input and options.
  * @param input
  * @param options?
  * @returns Promise<IRequestResponse>

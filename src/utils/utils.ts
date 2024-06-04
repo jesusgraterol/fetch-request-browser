@@ -183,8 +183,6 @@ const buildOptions = (options: Partial<IOptions> = {}): IOptions => ({
   responseDataType: options.responseDataType ?? 'json',
   acceptableStatusCodes: options.acceptableStatusCodes,
   acceptableStatusCodesRange: options.acceptableStatusCodesRange ?? { min: 200, max: 299 },
-  retryAttempts: options.retryAttempts ?? 0,
-  retryDelaySeconds: options.retryDelaySeconds ?? 3,
 });
 
 /**
