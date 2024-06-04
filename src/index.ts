@@ -6,7 +6,12 @@ import {
   IOptions,
   IRequestResponse,
 } from './shared/types.js';
-import { buildOptions, buildRequest, extractResponseData } from './utils/utils.js';
+import {
+  buildOptions,
+  buildRequest,
+  extractResponseData,
+  delay,
+} from './utils/utils.js';
 import { validateResponse } from './validations/validations.js';
 
 /* ************************************************************************************************
@@ -43,6 +48,11 @@ const send = async (
   // validate the response
   validateResponse(req, res, opts);
 
+  // print a warning in case the request was redirected
+  if (res.redirected) {
+    console.warn(`The request sent to '${req.url}' was redirected. Please update the implementation to avoid future redirections.`);
+  }
+
   // return the request's response
   return {
     headers: res.headers,
@@ -54,7 +64,7 @@ const send = async (
 /**
  * Builds and sends a GET HTTP Request based on the provided input and options.
  * IMPORTANT: The browser environment can be highly unreliable as the user can physically move
- * around and suffer from an intermittent Internet connection. Therefore, some GET requests are 
+ * around and suffer from an intermittent Internet connection. Therefore, some GET requests are
  * worth retrying as they could fail temporarily and prevent a view from loading.
  * @param input
  * @param options?
@@ -80,13 +90,22 @@ const __sendGET = (
     method: 'GET',
   },
 });
-const sendGET = (
+const sendGET = async (
   input: IRequestInput,
   options?: Partial<IOptions>,
   retryAttempts?: number,
   retryDelaySeconds?: number,
 ): Promise<IRequestResponse> => {
-
+  try {
+    return await __sendGET(input, options);
+  } catch (e) {
+    // if the request should be retried, activate the delay and do so. Otherwise, rethrow the error
+    if (typeof retryAttempts === 'number' && retryAttempts > 0) {
+      await delay(retryDelaySeconds || 3);
+      return sendGET(input, options, retryAttempts - 1, retryDelaySeconds);
+    }
+    throw e;
+  }
 };
 
 
