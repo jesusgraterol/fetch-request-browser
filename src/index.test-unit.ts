@@ -1,6 +1,6 @@
 import { describe, beforeAll, afterAll, beforeEach, afterEach, test, expect, vi, Mock } from 'vitest';
 import { buildRequest } from './utils/utils.js';
-import { send } from './index.js';
+import { send, sendGET } from './index.js';
 
 /* ************************************************************************************************
  *                                            HELPERS                                             *
@@ -17,7 +17,6 @@ const getFetchCallArg = (callIndex: number): any => {
   }
   return mockedFn.mock.calls[callIndex][0];
 };
-
 
 
 
@@ -51,6 +50,51 @@ describe('fetch-request', () => {
       });
       expect(fetch).toHaveBeenCalledOnce();
       expect(getFetchCallArg(0)).toStrictEqual(buildRequest('https://www.google.com'));
+    });
+  });
+
+
+
+  describe('sendGET', () => {
+    beforeAll(() => { });
+
+    afterAll(() => {});
+
+    beforeEach(() => { });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    test('can persist a GET request in case it fails', async () => {
+      vi.useFakeTimers();
+      vi.stubGlobal(
+        'fetch',
+        vi.fn().mockImplementationOnce(() => Promise.resolve({ status: 429 }))
+          .mockImplementationOnce(() => Promise.resolve({ status: 429 }))
+          .mockImplementationOnce(() => Promise.resolve({ status: 429 }))
+          .mockImplementationOnce(() => Promise.resolve({
+            status: 200,
+            headers: new Headers({ 'Content-Type': 'application/json' }),
+            json: () => Promise.resolve({}),
+          })),
+      );
+      expect(fetch).not.toHaveBeenCalled();
+
+      sendGET('https://www.google.com', undefined, 3, 10);
+      expect(fetch).toHaveBeenCalledTimes(1);
+
+      await vi.advanceTimersByTimeAsync(10000);
+      expect(fetch).toHaveBeenCalledTimes(2);
+
+      await vi.advanceTimersByTimeAsync(10000);
+      expect(fetch).toHaveBeenCalledTimes(3);
+
+      await vi.advanceTimersByTimeAsync(10000);
+      expect(fetch).toHaveBeenCalledTimes(4);
+
+      await vi.advanceTimersByTimeAsync(10000); // cleared - should not call send again
+      expect(fetch).toHaveBeenCalledTimes(4);
     });
   });
 });
