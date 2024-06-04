@@ -26,7 +26,6 @@ import { validateResponse } from './validations/validations.js';
  * @throws
  * - INVALID_REQUEST_URL: if the provided input URL cannot be parsed
  * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
- * - MISSING_CONTENT_TYPE_HEADER: if the Content-Type header is not present
  * - INVALID_REQUEST_OPTIONS: if the Request Instance cannot be instantiated due to the passed opts
  * - UNEXPECTED_RESPONSE_STATUS_CODE: if the code doesn't meet the requirements set in the options
  * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers are not identical
@@ -91,7 +90,6 @@ const __executeSendGET = (
  * @throws
  * - INVALID_REQUEST_URL: if the provided input URL cannot be parsed
  * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
- * - MISSING_CONTENT_TYPE_HEADER: if the Content-Type header is not present
  * - INVALID_REQUEST_OPTIONS: if the Request Instance cannot be instantiated due to the passed opts
  * - UNEXPECTED_RESPONSE_STATUS_CODE: if the code doesn't meet the requirements set in the options
  * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers are not identical
@@ -115,7 +113,6 @@ const sendGET = async (
   }
 };
 
-
 /**
  * Builds and sends a POST HTTP Request based on the provided input and options.
  * @param input
@@ -124,7 +121,6 @@ const sendGET = async (
  * @throws
  * - INVALID_REQUEST_URL: if the provided input URL cannot be parsed
  * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
- * - MISSING_CONTENT_TYPE_HEADER: if the Content-Type header is not present
  * - INVALID_REQUEST_OPTIONS: if the Request Instance cannot be instantiated due to the passed opts
  * - UNEXPECTED_RESPONSE_STATUS_CODE: if the code doesn't meet the requirements set in the options
  * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers are not identical

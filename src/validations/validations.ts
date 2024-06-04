@@ -43,10 +43,10 @@ const __validateStatusCode = (res: Response, options: IOptions): void => {
  * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers are not identical
  */
 const __validateContentType = (req: Request, res: Response) => {
-  const reqContentType = req.headers.get('Content-Type');
+  const reqAccept = req.headers.get('Accept');
   const resContentType = res.headers.get('Content-Type');
-  if (reqContentType !== resContentType) {
-    throw new Error(encodeError(`The request's content type '${reqContentType}' is different from the one received in the response '${resContentType}'.`, ERRORS.CONTENT_TYPE_MISSMATCH));
+  if (reqAccept !== resContentType) {
+    throw new Error(encodeError(`The request's Accept Header '${reqAccept}' is different from the Content-Type received in the response '${resContentType}'.`, ERRORS.CONTENT_TYPE_MISSMATCH));
   }
 };
 

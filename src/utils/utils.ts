@@ -33,15 +33,16 @@ const __buildRequestInput = (requestInput: IRequestInput): URL => {
 
 /**
  * Builds the headers that will be used in the request. If none are provided, it returns the default
- * { 'Content-Type': 'application/json' }.
+ * Headers.
  * @param headers
  * @returns Headers
  * @throws
  * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
- * - MISSING_CONTENT_TYPE_HEADER: if the Content-Type header is not present
  */
 const __buildRequestHeaders = (headers: any): Headers => {
   let reqHeaders: Headers;
+
+  // init the Headers Instance
   if (headers && typeof headers === 'object') {
     try {
       reqHeaders = new Headers(headers);
@@ -51,11 +52,20 @@ const __buildRequestHeaders = (headers: any): Headers => {
   } else if (headers instanceof Headers) {
     reqHeaders = headers;
   } else {
-    reqHeaders = new Headers({ 'Content-Type': 'application/json' });
+    reqHeaders = new Headers({ Accept: 'application/json', 'Content-Type': 'application/json' });
   }
+
+  // include the Accept Header in case it wasn't provided
+  if (!reqHeaders.has('Accept')) {
+    reqHeaders.append('Accept', 'application/json');
+  }
+
+  // include the Content-Type Header in case it wasn't included
   if (!reqHeaders.has('Content-Type')) {
-    throw new Error(encodeError(`The provided header did not include 'Content-Type'. Received: ${Array.from(reqHeaders.keys())}`, ERRORS.MISSING_CONTENT_TYPE_HEADER));
+    reqHeaders.append('Content-Type', 'application/json');
   }
+
+  // finally, return the headers
   return reqHeaders;
 };
 
@@ -108,7 +118,6 @@ const __buildRequestOptions = (options: Partial<IRequestOptions> = {}): IRequest
  * @throws
  * - INVALID_REQUEST_URL: if the provided input URL cannot be parsed
  * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
- * - MISSING_CONTENT_TYPE_HEADER: if the Content-Type header is not present
  * - INVALID_REQUEST_OPTIONS: if the Request Instance cannot be instantiated due to the passed opts
  */
 const buildRequest = (input: IRequestInput, options?: Partial<IRequestOptions>): Request => {

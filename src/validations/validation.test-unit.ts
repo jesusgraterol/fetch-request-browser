@@ -8,7 +8,7 @@ import { validateResponse } from './validations.js';
  ************************************************************************************************ */
 
 const rq = (
-  headers: Headers = new Headers({ 'Content-Type': 'application/json' }),
+  headers: Headers = new Headers({ Accept: 'application/json' }),
 ): Request => (<any>{
   headers,
 });
