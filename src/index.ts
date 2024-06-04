@@ -137,6 +137,30 @@ const sendPOST = (
   },
 });
 
+/**
+ * Builds and sends a PUT HTTP Request based on the provided input and options.
+ * @param input
+ * @param options?
+ * @returns Promise<IRequestResponse>
+ * @throws
+ * - INVALID_REQUEST_URL: if the provided input URL cannot be parsed
+ * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
+ * - INVALID_REQUEST_OPTIONS: if the Request Instance cannot be instantiated due to the passed opts
+ * - UNEXPECTED_RESPONSE_STATUS_CODE: if the code doesn't meet the requirements set in the options
+ * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers are not identical
+ * - INVALID_RESPONSE_DTYPE: if the data type is not supported by the Response Instance
+ */
+const sendPUT = (
+  input: IRequestInput,
+  options?: Partial<IOptions>,
+): Promise<IRequestResponse> => send(input, {
+  ...options,
+  requestOptions: {
+    ...options?.requestOptions,
+    method: 'PUT',
+  },
+});
+
 
 
 
@@ -157,4 +181,5 @@ export {
   send,
   sendGET,
   sendPOST,
+  sendPUT,
 };

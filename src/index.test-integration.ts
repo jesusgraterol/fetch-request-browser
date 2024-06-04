@@ -1,5 +1,5 @@
 import { describe, beforeAll, afterAll, beforeEach, afterEach, test, expect } from 'vitest';
-import { sendGET, sendPOST } from './index.js';
+import { sendGET, sendPOST, sendPUT } from './index.js';
 
 /* ************************************************************************************************
  *                                             TESTS                                              *
@@ -36,7 +36,7 @@ describe('sendGET', () => {
     expect(headers.get('Content-Type')).toBe('application/json');
 
     expect(typeof data).toBe('object');
-    expect(data.args).toStrictEqual({ foo: 'hey', bar: '123'});
+    expect(data.args).toStrictEqual({ foo: 'hey', bar: '123' });
     expect(typeof data.headers).toBe('object');
     expect(data.headers.Accept).toBe('application/json');
     expect(data.headers['Content-Type']).toBe('application/json');
@@ -61,6 +61,37 @@ describe('sendPOST', () => {
       someNumber: 123456,
     };
     const { headers, data } = await sendPOST(url, { requestOptions: { body } });
+
+    expect(headers.get('Content-Type')).toBe('application/json');
+
+    expect(typeof data).toBe('object');
+    expect(data.args).toStrictEqual({});
+    expect(data.json).toStrictEqual(body);
+    expect(typeof data.headers).toBe('object');
+    expect(data.headers.Accept).toBe('application/json');
+    expect(data.headers['Content-Type']).toBe('application/json');
+    expect(data.url).toBe(url);
+  }, 60000);
+});
+
+
+
+describe('sendPUT', () => {
+  beforeAll(() => { });
+
+  afterAll(() => { });
+
+  beforeEach(() => { });
+
+  afterEach(() => { });
+
+  test('can send a PUT request with a body', async () => {
+    const url = 'https://httpbin.org/put';
+    const body = {
+      someKey: 'Hello',
+      someNumber: 123456,
+    };
+    const { headers, data } = await sendPUT(url, { requestOptions: { body } });
 
     expect(headers.get('Content-Type')).toBe('application/json');
 
