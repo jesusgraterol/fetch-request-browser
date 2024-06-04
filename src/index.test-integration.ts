@@ -8,7 +8,9 @@ import { sendDELETE, sendGET, sendPATCH, sendPOST, sendPUT } from './index.js';
 describe('sendGET', () => {
   test('can send a GET request', async () => {
     const url = 'https://httpbin.org/get';
-    const { headers, data } = await sendGET(url);
+    const { code, headers, data } = await sendGET(url);
+
+    expect(code).toBe(200);
 
     expect(headers.get('Content-Type')).toBe('application/json');
 
@@ -23,7 +25,9 @@ describe('sendGET', () => {
 
   test('can send a GET request w/ query string', async () => {
     const url = 'https://httpbin.org/get?foo=hey&bar=123';
-    const { headers, data } = await sendGET(url);
+    const { code, headers, data } = await sendGET(url);
+
+    expect(code).toBe(200);
 
     expect(headers.get('Content-Type')).toBe('application/json');
 
@@ -47,7 +51,9 @@ describe('sendPOST', () => {
       someKey: 'Hello',
       someNumber: 123456,
     };
-    const { headers, data } = await sendPOST(url, { requestOptions: { body } });
+    const { code, headers, data } = await sendPOST(url, { requestOptions: { body } });
+
+    expect(code).toBe(200);
 
     expect(headers.get('Content-Type')).toBe('application/json');
 
@@ -72,7 +78,9 @@ describe('sendPUT', () => {
       someKey: 'Hello',
       someNumber: 123456,
     };
-    const { headers, data } = await sendPUT(url, { requestOptions: { body } });
+    const { code, headers, data } = await sendPUT(url, { requestOptions: { body } });
+
+    expect(code).toBe(200);
 
     expect(headers.get('Content-Type')).toBe('application/json');
 
@@ -97,7 +105,9 @@ describe('sendPATCH', () => {
       someKey: 'Hello',
       someNumber: 123456,
     };
-    const { headers, data } = await sendPATCH(url, { requestOptions: { body } });
+    const { code, headers, data } = await sendPATCH(url, { requestOptions: { body } });
+
+    expect(code).toBe(200);
 
     expect(headers.get('Content-Type')).toBe('application/json');
 
@@ -118,7 +128,9 @@ describe('sendPATCH', () => {
 describe('sendDELETE', () => {
   test('can send a DELETE request without a body', async () => {
     const url = 'https://httpbin.org/delete';
-    const { headers, data } = await sendDELETE(url);
+    const { code, headers, data } = await sendDELETE(url);
+
+    expect(code).toBe(200);
 
     expect(headers.get('Content-Type')).toBe('application/json');
 
@@ -137,7 +149,9 @@ describe('sendDELETE', () => {
       someKey: 'Hello',
       someNumber: 123456,
     };
-    const { headers, data } = await sendDELETE(url, { requestOptions: { body } });
+    const { code, headers, data } = await sendDELETE(url, { requestOptions: { body } });
+
+    expect(code).toBe(200);
 
     expect(headers.get('Content-Type')).toBe('application/json');
 

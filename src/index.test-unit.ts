@@ -45,6 +45,7 @@ describe('fetch-request', () => {
         json: () => Promise.resolve(data),
       })));
       await expect(send('https://www.google.com')).resolves.toStrictEqual({
+        code: 200,
         headers,
         data,
       });
