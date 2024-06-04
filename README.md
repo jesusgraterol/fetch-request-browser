@@ -3,7 +3,7 @@
 The `fetch-request-browser` package makes working with external APIs simple and efficient. This intuitive wrapper leverages the power of the Fetch API, providing a clean and concise interface for your API interactions.
 
 
-
+If you are working on a node-based environment, make use of [fetch-request-node](https://github.com/jesusgraterol/fetch-request-node) instead.
 
 
 <br />
