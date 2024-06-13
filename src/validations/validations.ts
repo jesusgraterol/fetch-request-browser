@@ -36,7 +36,7 @@ const __validateStatusCode = (res: Response, options: IOptions): void => {
 };
 
 /**
- * Ensures the Request's Content-Type Header is identical to the Response's
+ * Ensures the Request's Accept Header matches the Response's Content-Type
  * @param req
  * @param res
  * @throws
