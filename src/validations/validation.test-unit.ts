@@ -48,6 +48,12 @@ describe('validateResponse', () => {
     ).toThrowError(ERRORS.UNEXPECTED_RESPONSE_STATUS_CODE);
   });
 
+  test('throws if the response doesn\'t have the Content-Type Header', () => {
+    expect(
+      () => validateResponse(rq(), rs(200, 'OK', new Headers()), buildOptions()),
+    ).toThrowError(ERRORS.INVALID_RESPONSE_CONTENT_TYPE);
+  });
+
   test('a response can be successful even if the Content-Type Header is not identical to the request\'s Accept Header', () => {
     expect(
       validateResponse(rq(), rs(200, 'OK', new Headers({ 'Content-Type': 'application/json; charset=utf-8' })), buildOptions()),
