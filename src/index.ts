@@ -28,7 +28,8 @@ import { validateResponse } from './validations/validations.js';
  * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
  * - INVALID_REQUEST_OPTIONS: if the Request Instance cannot be instantiated due to the passed opts
  * - UNEXPECTED_RESPONSE_STATUS_CODE: if the code doesn't meet the requirements set in the options
- * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers are not identical
+ * - INVALID_RESPONSE_CONTENT_TYPE: if the res lacks the Content-Type Header or is an empty string
+ * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers don't match
  * - INVALID_RESPONSE_DTYPE: if the data type is not supported by the Response Instance
  */
 const send = async (
@@ -93,7 +94,8 @@ const __executeSendGET = (
  * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
  * - INVALID_REQUEST_OPTIONS: if the Request Instance cannot be instantiated due to the passed opts
  * - UNEXPECTED_RESPONSE_STATUS_CODE: if the code doesn't meet the requirements set in the options
- * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers are not identical
+ * - INVALID_RESPONSE_CONTENT_TYPE: if the res lacks the Content-Type Header or is an empty string
+ * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers don't match
  * - INVALID_RESPONSE_DTYPE: if the data type is not supported by the Response Instance
  */
 const sendGET = async (
@@ -124,7 +126,8 @@ const sendGET = async (
  * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
  * - INVALID_REQUEST_OPTIONS: if the Request Instance cannot be instantiated due to the passed opts
  * - UNEXPECTED_RESPONSE_STATUS_CODE: if the code doesn't meet the requirements set in the options
- * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers are not identical
+ * - INVALID_RESPONSE_CONTENT_TYPE: if the res lacks the Content-Type Header or is an empty string
+ * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers don't match
  * - INVALID_RESPONSE_DTYPE: if the data type is not supported by the Response Instance
  */
 const sendPOST = (
@@ -148,7 +151,8 @@ const sendPOST = (
  * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
  * - INVALID_REQUEST_OPTIONS: if the Request Instance cannot be instantiated due to the passed opts
  * - UNEXPECTED_RESPONSE_STATUS_CODE: if the code doesn't meet the requirements set in the options
- * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers are not identical
+ * - INVALID_RESPONSE_CONTENT_TYPE: if the res lacks the Content-Type Header or is an empty string
+ * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers don't match
  * - INVALID_RESPONSE_DTYPE: if the data type is not supported by the Response Instance
  */
 const sendPUT = (
@@ -172,7 +176,8 @@ const sendPUT = (
  * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
  * - INVALID_REQUEST_OPTIONS: if the Request Instance cannot be instantiated due to the passed opts
  * - UNEXPECTED_RESPONSE_STATUS_CODE: if the code doesn't meet the requirements set in the options
- * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers are not identical
+ * - INVALID_RESPONSE_CONTENT_TYPE: if the res lacks the Content-Type Header or is an empty string
+ * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers don't match
  * - INVALID_RESPONSE_DTYPE: if the data type is not supported by the Response Instance
  */
 const sendPATCH = (
@@ -196,7 +201,8 @@ const sendPATCH = (
  * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
  * - INVALID_REQUEST_OPTIONS: if the Request Instance cannot be instantiated due to the passed opts
  * - UNEXPECTED_RESPONSE_STATUS_CODE: if the code doesn't meet the requirements set in the options
- * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers are not identical
+ * - INVALID_RESPONSE_CONTENT_TYPE: if the res lacks the Content-Type Header or is an empty string
+ * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers don't match
  * - INVALID_RESPONSE_DTYPE: if the data type is not supported by the Response Instance
  */
 const sendDELETE = (

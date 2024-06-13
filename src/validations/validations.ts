@@ -40,13 +40,17 @@ const __validateStatusCode = (res: Response, options: IOptions): void => {
  * @param req
  * @param res
  * @throws
- * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers are not identical
+ * - INVALID_RESPONSE_CONTENT_TYPE: if the res lacks the Content-Type Header or is an empty string
+ * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers don't match
  */
 const __validateContentType = (req: Request, res: Response) => {
-  const reqAccept = req.headers.get('Accept');
+  const reqAccept: string = <string>req.headers.get('Accept'); // reqs sent with this lib always have the Accept header
   const resContentType = res.headers.get('Content-Type');
-  if (reqAccept !== resContentType) {
-    throw new Error(encodeError(`The request's Accept Header '${reqAccept}' is different from the Content-Type received in the response '${resContentType}'.`, ERRORS.CONTENT_TYPE_MISSMATCH));
+  if (typeof resContentType !== 'string' || !resContentType.length) {
+    throw new Error(encodeError(`The response's Content-Type Header is invalid. Received: '${resContentType}'.`, ERRORS.INVALID_RESPONSE_CONTENT_TYPE));
+  }
+  if (!resContentType.includes(reqAccept)) {
+    throw new Error(encodeError(`The request's Accept Header '${reqAccept}' is different to the Content-Type received in the response '${resContentType}'.`, ERRORS.CONTENT_TYPE_MISSMATCH));
   }
 };
 
@@ -57,7 +61,8 @@ const __validateContentType = (req: Request, res: Response) => {
  * @param options
  * @throws
  * - UNEXPECTED_RESPONSE_STATUS_CODE: if the code doesn't meet the requirements set in the options
- * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers are not identical
+ * - INVALID_RESPONSE_CONTENT_TYPE: if the res lacks the Content-Type Header or is an empty string
+ * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers don't match
  */
 const validateResponse = (req: Request, res: Response, options: IOptions): void => {
   // validate the status code
