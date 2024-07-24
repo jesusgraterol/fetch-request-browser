@@ -24,7 +24,7 @@ $ npm install -S fetch-request-browser
 ## Usage
 
 ```typescript
-import { sendGET } from 'fetch-request-browser';
+import { send } from 'fetch-request-browser';
 
 await send(
   'https://httpbin.org/get', 
