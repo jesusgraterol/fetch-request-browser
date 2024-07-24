@@ -26,7 +26,15 @@ $ npm install -S fetch-request-browser
 ```typescript
 import { sendGET } from 'fetch-request-browser';
 
-await sendGET('https://httpbin.org/get');
+await send(
+  'https://httpbin.org/get', 
+  { 
+    requestOptions: {  
+      method: 'GET' 
+    } 
+  }, 
+  [3, 5, 10]
+);
 // {
 //   code: 200,
 //   headers: Headers {
@@ -69,7 +77,8 @@ Build and send an HTTP Request (any method):
 ```typescript
 send(
   input: IRequestInput, 
-  options?: Partial<IOptions>
+  options?: Partial<IOptions>,
+  retryDelaySchedule?: number[],
 ): Promise<IRequestResponse>
 ```
 
@@ -80,8 +89,7 @@ Build and send a `GET` HTTP Request:
 sendGET(
   input: IRequestInput,
   options?: Partial<IOptions>,
-  retryAttempts?: number,
-  retryDelaySeconds?: number
+  retryDelaySchedule?: number[],
 ): Promise<IRequestResponse>
 ```
 
@@ -91,7 +99,8 @@ Build and send a `POST` HTTP Request:
 ```typescript
 sendPOST(
   input: IRequestInput,
-  options?: Partial<IOptions>
+  options?: Partial<IOptions>,
+  retryDelaySchedule?: number[],
 ): Promise<IRequestResponse>
 ```
 
@@ -101,7 +110,8 @@ Build and send a `PUT` HTTP Request:
 ```typescript
 sendPUT(
   input: IRequestInput,
-  options?: Partial<IOptions>
+  options?: Partial<IOptions>,
+  retryDelaySchedule?: number[],
 ): Promise<IRequestResponse>
 ```
 
@@ -111,7 +121,8 @@ Build and send a `PATCH` HTTP Request:
 ```typescript
 sendPATCH(
   input: IRequestInput,
-  options?: Partial<IOptions>
+  options?: Partial<IOptions>,
+  retryDelaySchedule?: number[],
 ): Promise<IRequestResponse>
 ```
 
@@ -121,7 +132,8 @@ Build and send a `DELETE` HTTP Request:
 ```typescript
 sendDELETE(
   input: IRequestInput,
-  options?: Partial<IOptions>
+  options?: Partial<IOptions>,
+  retryDelaySchedule?: number[],
 ): Promise<IRequestResponse>
 ```
 

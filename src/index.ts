@@ -19,20 +19,13 @@ import { validateResponse } from './validations/validations.js';
  ************************************************************************************************ */
 
 /**
- * Builds and sends an HTTP Request based on the provided input and options.
+ * Builds and sends an HTTP Request based on the provided input and options. This function is only
+ * meant to be invoked by `send(...)`
  * @param input
  * @param options?
  * @returns Promise<IRequestResponse>
- * @throws
- * - INVALID_REQUEST_URL: if the provided input URL cannot be parsed
- * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
- * - INVALID_REQUEST_OPTIONS: if the Request Instance cannot be instantiated due to the passed opts
- * - UNEXPECTED_RESPONSE_STATUS_CODE: if the code doesn't meet the requirements set in the options
- * - INVALID_RESPONSE_CONTENT_TYPE: if the res lacks the Content-Type Header or is an empty string
- * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers don't match
- * - INVALID_RESPONSE_DTYPE: if the data type is not supported by the Response Instance
  */
-const send = async (
+const __executeSend = async (
   input: IRequestInput,
   options?: Partial<IOptions>,
 ): Promise<IRequestResponse> => {
@@ -61,24 +54,38 @@ const send = async (
   };
 };
 
-
 /**
- * Executes the sendGET functionality. This func is wrapped inside of the sendGET in order to allow
- * a request to be retried.
+ * Attempts to send a HTTP request persistently (optionally).
  * @param input
  * @param options?
+ * @param retryDelaySchedule? - list of seconds that will be applied to the delay before retrying
  * @returns Promise<IRequestResponse>
+ * @throws
+ * - INVALID_REQUEST_URL: if the provided input URL cannot be parsed
+ * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
+ * - INVALID_REQUEST_OPTIONS: if the Request Instance cannot be instantiated due to the passed opts
+ * - UNEXPECTED_RESPONSE_STATUS_CODE: if the code doesn't meet the requirements set in the options
+ * - INVALID_RESPONSE_CONTENT_TYPE: if the res lacks the Content-Type Header or is an empty string
+ * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers don't match
+ * - INVALID_RESPONSE_DTYPE: if the data type is not supported by the Response Instance
  */
-const __executeSendGET = (
+const send = async (
   input: IRequestInput,
   options?: Partial<IOptions>,
-): Promise<IRequestResponse> => send(input, {
-  ...options,
-  requestOptions: {
-    ...options?.requestOptions,
-    method: 'GET',
-  },
-});
+  retryDelaySchedule?: number[],
+): Promise<IRequestResponse> => {
+  try {
+    return await __executeSend(input, options);
+  } catch (e) {
+    // rethrow the error if there are no attempts left. Otherwise, try again after the delay
+    if (!Array.isArray(retryDelaySchedule) || retryDelaySchedule.length === 0) {
+      throw e;
+    }
+    await delay(retryDelaySchedule[0]);
+    return send(input, options, retryDelaySchedule.slice(1));
+  }
+};
+
 /**
  * Builds and sends a GET HTTP Request based on the provided input and options.
  * IMPORTANT: The browser environment can be highly unreliable as the user can physically move
@@ -86,8 +93,7 @@ const __executeSendGET = (
  * worth retrying as they could fail temporarily and prevent a view from loading.
  * @param input
  * @param options?
- * @param retryAttempts? - the number of times it will retry the request on failure
- * @param retryDelaySeconds? - the # of secs it will wait before re-sending the req. Defaults to 3
+ * @param retryDelaySchedule? - list of seconds that will be applied to the delay before retrying
  * @returns Promise<IRequestResponse>
  * @throws
  * - INVALID_REQUEST_URL: if the provided input URL cannot be parsed
@@ -101,25 +107,20 @@ const __executeSendGET = (
 const sendGET = async (
   input: IRequestInput,
   options?: Partial<IOptions>,
-  retryAttempts?: number,
-  retryDelaySeconds?: number,
-): Promise<IRequestResponse> => {
-  try {
-    return await __executeSendGET(input, options);
-  } catch (e) {
-    // if the request should be retried, activate the delay and do so. Otherwise, rethrow the error
-    if (typeof retryAttempts === 'number' && retryAttempts > 0) {
-      await delay(retryDelaySeconds || 3);
-      return sendGET(input, options, retryAttempts - 1, retryDelaySeconds);
-    }
-    throw e;
-  }
-};
+  retryDelaySchedule?: number[],
+): Promise<IRequestResponse> => send(input, {
+  ...options,
+  requestOptions: {
+    ...options?.requestOptions,
+    method: 'GET',
+  },
+}, retryDelaySchedule);
 
 /**
  * Builds and sends a POST HTTP Request based on the provided input and options.
  * @param input
  * @param options?
+ * @param retryDelaySchedule? - list of seconds that will be applied to the delay before retrying
  * @returns Promise<IRequestResponse>
  * @throws
  * - INVALID_REQUEST_URL: if the provided input URL cannot be parsed
@@ -133,18 +134,20 @@ const sendGET = async (
 const sendPOST = (
   input: IRequestInput,
   options?: Partial<IOptions>,
+  retryDelaySchedule?: number[],
 ): Promise<IRequestResponse> => send(input, {
   ...options,
   requestOptions: {
     ...options?.requestOptions,
     method: 'POST',
   },
-});
+}, retryDelaySchedule);
 
 /**
  * Builds and sends a PUT HTTP Request based on the provided input and options.
  * @param input
  * @param options?
+ * @param retryDelaySchedule? - list of seconds that will be applied to the delay before retrying
  * @returns Promise<IRequestResponse>
  * @throws
  * - INVALID_REQUEST_URL: if the provided input URL cannot be parsed
@@ -158,18 +161,20 @@ const sendPOST = (
 const sendPUT = (
   input: IRequestInput,
   options?: Partial<IOptions>,
+  retryDelaySchedule?: number[],
 ): Promise<IRequestResponse> => send(input, {
   ...options,
   requestOptions: {
     ...options?.requestOptions,
     method: 'PUT',
   },
-});
+}, retryDelaySchedule);
 
 /**
  * Builds and sends a PATCH HTTP Request based on the provided input and options.
  * @param input
  * @param options?
+ * @param retryDelaySchedule? - list of seconds that will be applied to the delay before retrying
  * @returns Promise<IRequestResponse>
  * @throws
  * - INVALID_REQUEST_URL: if the provided input URL cannot be parsed
@@ -183,18 +188,20 @@ const sendPUT = (
 const sendPATCH = (
   input: IRequestInput,
   options?: Partial<IOptions>,
+  retryDelaySchedule?: number[],
 ): Promise<IRequestResponse> => send(input, {
   ...options,
   requestOptions: {
     ...options?.requestOptions,
     method: 'PATCH',
   },
-});
+}, retryDelaySchedule);
 
 /**
  * Builds and sends a DELETE HTTP Request based on the provided input and options.
  * @param input
  * @param options?
+ * @param retryDelaySchedule? - list of seconds that will be applied to the delay before retrying
  * @returns Promise<IRequestResponse>
  * @throws
  * - INVALID_REQUEST_URL: if the provided input URL cannot be parsed
@@ -208,13 +215,14 @@ const sendPATCH = (
 const sendDELETE = (
   input: IRequestInput,
   options?: Partial<IOptions>,
+  retryDelaySchedule?: number[],
 ): Promise<IRequestResponse> => send(input, {
   ...options,
   requestOptions: {
     ...options?.requestOptions,
     method: 'DELETE',
   },
-});
+}, retryDelaySchedule);
 
 
 

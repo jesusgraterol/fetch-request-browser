@@ -1,6 +1,6 @@
 {
   "name": "fetch-request-browser",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "The fetch-request-browser package makes working with external APIs simple and efficient. This intuitive wrapper leverages the power of the Fetch API, providing a clean and concise interface for your API interactions.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -33,15 +33,15 @@
   },
   "homepage": "https://github.com/jesusgraterol/fetch-request-browser#readme",
   "devDependencies": {
-    "@types/node": "^20.13.0",
-    "@typescript-eslint/eslint-plugin": "^7.11.0",
-    "@typescript-eslint/parser": "^7.11.0",
+    "@types/node": "^20.14.12",
+    "@typescript-eslint/eslint-plugin": "^7.17.0",
+    "@typescript-eslint/parser": "^7.17.0",
     "eslint-config-airbnb-typescript": "^18.0.0",
     "ts-lib-builder": "^1.0.3",
-    "typescript": "^5.4.5",
+    "typescript": "^5.5.4",
     "vitest": "^1.6.0"
   },
   "dependencies": {
-    "error-message-utils": "^1.1.0"
+    "error-message-utils": "^1.1.1"
   }
 }
