@@ -1,3 +1,4 @@
+import { extractMessage } from 'error-message-utils';
 import {
   IRequestInput,
   IRequestMethod,
@@ -77,8 +78,12 @@ const send = async (
   try {
     return await __executeSend(input, options);
   } catch (e) {
-    // rethrow the error if there are no attempts left. Otherwise, try again after the delay
-    if (!Array.isArray(retryDelaySchedule) || retryDelaySchedule.length === 0) {
+    // rethrow the err if there are no attempts left or the HTTP status code is 429 (too many reqs)
+    if (
+      extractMessage(e).includes('429')
+      || !Array.isArray(retryDelaySchedule)
+      || retryDelaySchedule.length === 0
+    ) {
       throw e;
     }
     await delay(retryDelaySchedule[0]);

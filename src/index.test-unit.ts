@@ -71,9 +71,9 @@ describe('fetch-request', () => {
       vi.useFakeTimers();
       vi.stubGlobal(
         'fetch',
-        vi.fn().mockImplementationOnce(() => Promise.resolve({ status: 429 }))
-          .mockImplementationOnce(() => Promise.resolve({ status: 429 }))
-          .mockImplementationOnce(() => Promise.resolve({ status: 429 }))
+        vi.fn().mockImplementationOnce(() => Promise.resolve({ status: 500 }))
+          .mockImplementationOnce(() => Promise.resolve({ status: 500 }))
+          .mockImplementationOnce(() => Promise.resolve({ status: 500 }))
           .mockImplementationOnce(() => Promise.resolve({
             status: 200,
             headers: new Headers({ 'Content-Type': 'application/json' }),
