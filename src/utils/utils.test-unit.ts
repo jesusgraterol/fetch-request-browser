@@ -4,20 +4,6 @@ import { ERRORS } from '../shared/errors.js';
 import { buildOptions, buildRequest, delay, extractResponseData } from './utils.js';
 
 /* ************************************************************************************************
- *                                           CONSTANTS                                            *
- ************************************************************************************************ */
-
-// the default request headers when none are provided
-const DEFAULT_REQ_HEADERS = new Headers({
-  Accept: 'application/json',
-  'Content-Type': 'application/json',
-});
-
-
-
-
-
-/* ************************************************************************************************
  *                                            HELPERS                                             *
  ************************************************************************************************ */
 
@@ -51,7 +37,9 @@ describe('buildRequest', () => {
     expect(req.integrity).toBe('');
     expect(req.keepalive).toBe(false);
     expect(req.body).toBeNull();
-    expect(req.headers).toEqual(DEFAULT_REQ_HEADERS);
+    expect(req.headers).toEqual(new Headers({
+      Accept: 'application/json',
+    }));
   });
 
   test('can instantiate a Request with custom options', async () => {
@@ -105,7 +93,6 @@ describe('buildRequest', () => {
     });
     expect(buildRequest('https://www.mozilla.org/favicon.ico', { headers }).headers).toStrictEqual(new Headers({
       Accept: 'application/json',
-      'Content-Type': 'application/json',
       Authorization: 'bearer 123456',
     }));
   });

@@ -35,11 +35,12 @@ const __buildRequestInput = (requestInput: IRequestInput): URL => {
  * Builds the headers that will be used in the request. If none are provided, it returns the default
  * Headers.
  * @param headers
+ * @param method
  * @returns Headers
  * @throws
  * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
  */
-const __buildRequestHeaders = (headers: any): Headers => {
+const __buildRequestHeaders = (headers: any, method: IRequestMethod): Headers => {
   let reqHeaders: Headers;
 
   // init the Headers Instance
@@ -52,7 +53,9 @@ const __buildRequestHeaders = (headers: any): Headers => {
   } else if (headers instanceof Headers) {
     reqHeaders = headers;
   } else {
-    reqHeaders = new Headers({ Accept: 'application/json', 'Content-Type': 'application/json' });
+    reqHeaders = method === 'GET'
+      ? new Headers({ Accept: 'application/json' })
+      : new Headers({ Accept: 'application/json', 'Content-Type': 'application/json' });
   }
 
   // include the Accept Header in case it wasn't provided
@@ -60,8 +63,8 @@ const __buildRequestHeaders = (headers: any): Headers => {
     reqHeaders.append('Accept', 'application/json');
   }
 
-  // include the Content-Type Header in case it wasn't included
-  if (!reqHeaders.has('Content-Type')) {
+  // include the Content-Type Header in case it wasn't included and it isn't a GET request
+  if (!reqHeaders.has('Content-Type') && method !== 'GET') {
     reqHeaders.append('Content-Type', 'application/json');
   }
 
@@ -98,7 +101,7 @@ const __buildRequestOptions = (options: Partial<IRequestOptions> = {}): IRequest
     mode: options.mode ?? 'cors',
     cache: options.cache ?? 'default',
     credentials: options.credentials ?? 'same-origin',
-    headers: __buildRequestHeaders(options.headers),
+    headers: __buildRequestHeaders(options.headers, method),
     priority: options.priority ?? 'auto',
     redirect: options.redirect ?? 'follow',
     referrer: options.referrer ?? 'about:client',

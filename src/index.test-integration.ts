@@ -18,7 +18,6 @@ describe('sendGET', () => {
     expect(data.args).toStrictEqual({});
     expect(typeof data.headers).toBe('object');
     expect(data.headers.Accept).toBe('application/json');
-    expect(data.headers['Content-Type']).toBe('application/json');
     expect(data.url).toBe(url);
   }, 60000);
 
@@ -35,7 +34,6 @@ describe('sendGET', () => {
     expect(data.args).toStrictEqual({ foo: 'hey', bar: '123' });
     expect(typeof data.headers).toBe('object');
     expect(data.headers.Accept).toBe('application/json');
-    expect(data.headers['Content-Type']).toBe('application/json');
     expect(data.url).toBe(url);
   }, 60000);
 });
