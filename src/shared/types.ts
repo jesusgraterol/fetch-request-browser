@@ -76,6 +76,9 @@ interface IOptions {
 
   // the range of codes that are considered to be acceptable. Defaults to: { min: 200, max: 299 }
   acceptableStatusCodesRange: { min: number, max: number };
+
+  // if enabled, it will not validate the status code from the response object
+  skipStatusCodeValidation: boolean;
 }
 
 /**

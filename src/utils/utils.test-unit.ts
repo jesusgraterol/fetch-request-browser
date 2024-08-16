@@ -197,6 +197,7 @@ describe('buildOptions', () => {
       responseDataType: 'json',
       acceptableStatusCodes: undefined,
       acceptableStatusCodesRange: { min: 200, max: 299 },
+      skipStatusCodeValidation: false,
     });
   });
 
@@ -211,11 +212,13 @@ describe('buildOptions', () => {
       responseDataType: 'text',
       acceptableStatusCodes: [200, 201],
       acceptableStatusCodesRange: range,
+      skipStatusCodeValidation: true,
     })).toStrictEqual({
       requestOptions: reqOptions,
       responseDataType: 'text',
       acceptableStatusCodes: [200, 201],
       acceptableStatusCodesRange: range,
+      skipStatusCodeValidation: true,
     });
   });
 });

@@ -65,4 +65,10 @@ describe('validateResponse', () => {
       () => validateResponse(rq(), rs(200, 'OK', new Headers({ 'Content-Type': 'text/html' })), buildOptions()),
     ).toThrowError(ERRORS.CONTENT_TYPE_MISSMATCH);
   });
+
+  test('can skip the validation of the status code', () => {
+    expect(
+      validateResponse(rq(), rs(500), buildOptions({ skipStatusCodeValidation: true })),
+    ).toBeUndefined();
+  });
 });

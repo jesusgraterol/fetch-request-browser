@@ -66,7 +66,9 @@ const __validateContentType = (req: Request, res: Response) => {
  */
 const validateResponse = (req: Request, res: Response, options: IOptions): void => {
   // validate the status code
-  __validateStatusCode(res, options);
+  if (!options.skipStatusCodeValidation) {
+    __validateStatusCode(res, options);
+  }
 
   // validate the content type
   __validateContentType(req, res);
