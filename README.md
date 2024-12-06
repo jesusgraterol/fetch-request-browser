@@ -17,7 +17,7 @@ npm install -S fetch-request-browser
 
 ### Examples
 
-Send a `GET` request that will retry on failure to [HTTPBin](https://httpbin.org/):
+Send a `GET` request that will retry (up to 3 times) on failure to [HTTPBin](https://httpbin.org/):
 
 ```typescript
 import { sendGET } from 'fetch-request-browser';
@@ -60,7 +60,7 @@ await sendGET(
 // }
 ```
 
-Send a `POST` request that will retry on failure to [HTTPBin](https://httpbin.org/):
+Send a `POST` request that will retry (up to 3 times) on failure to [HTTPBin](https://httpbin.org/):
 
 ```typescript
 import { sendGET } from 'fetch-request-browser';

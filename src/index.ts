@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import { extractMessage } from 'error-message-utils';
+import { isArrayValid, delay } from 'web-utils-kit';
 import {
   IRequestInput,
   IRequestMethod,
@@ -12,7 +13,6 @@ import {
   buildOptions,
   buildRequest,
   extractResponseData,
-  delay,
 } from './utils/utils.js';
 import { validateResponse } from './validations/validations.js';
 
@@ -80,11 +80,7 @@ const send = async (
     return await __executeSend(input, options);
   } catch (e) {
     // rethrow the err if there are no attempts left or the HTTP status code is 429 (too many reqs)
-    if (
-      extractMessage(e).includes('429')
-      || !Array.isArray(retryDelaySchedule)
-      || retryDelaySchedule.length === 0
-    ) {
+    if (extractMessage(e).includes('429') || !isArrayValid(retryDelaySchedule)) {
       throw e;
     }
     await delay(retryDelaySchedule[0]);

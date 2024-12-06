@@ -198,15 +198,6 @@ const buildOptions = (options: Partial<IOptions> = {}): IOptions => ({
   skipStatusCodeValidation: options.skipStatusCodeValidation ?? false,
 });
 
-/**
- * Creates an asynchronous delay that resolves once the provided seconds have passed.
- * @param seconds
- * @returns Promise<void>
- */
-const delay = (seconds: number): Promise<void> => new Promise((resolve) => {
-  setTimeout(resolve, seconds * 1000);
-});
-
 
 
 
@@ -223,5 +214,4 @@ export {
 
   // misc helpers
   buildOptions,
-  delay,
 };

@@ -1,4 +1,4 @@
-import { describe, beforeAll, afterAll, beforeEach, afterEach, test, expect, vi, Mock } from 'vitest';
+import { describe, afterEach, test, expect, vi, Mock } from 'vitest';
 import { buildRequest } from './utils/utils.js';
 import { send, sendGET } from './index.js';
 
@@ -25,12 +25,6 @@ const getFetchCallArg = (callIndex: number): any => {
  ************************************************************************************************ */
 
 describe('fetch-request', () => {
-  beforeAll(() => { });
-
-  afterAll(() => { });
-
-  beforeEach(() => { });
-
   afterEach(() => {
     vi.unstubAllGlobals();
   });
@@ -57,12 +51,6 @@ describe('fetch-request', () => {
 
 
   describe('sendGET', () => {
-    beforeAll(() => { });
-
-    afterAll(() => {});
-
-    beforeEach(() => { });
-
     afterEach(() => {
       vi.useRealTimers();
     });

@@ -1,7 +1,7 @@
-import { describe, beforeAll, afterAll, beforeEach, afterEach, test, expect, vi } from 'vitest';
+import { describe, test, expect, vi } from 'vitest';
 import { IRequestOptions, IResponseDataType } from '../shared/types.js';
 import { ERRORS } from '../shared/errors.js';
-import { buildOptions, buildRequest, delay, extractResponseData } from './utils.js';
+import { buildOptions, buildRequest, extractResponseData } from './utils.js';
 
 /* ************************************************************************************************
  *                                            HELPERS                                             *
@@ -220,33 +220,5 @@ describe('buildOptions', () => {
       acceptableStatusCodesRange: range,
       skipStatusCodeValidation: true,
     });
-  });
-});
-
-
-
-
-
-describe('delay', () => {
-  beforeAll(() => {
-    vi.useFakeTimers();
-  });
-
-  afterAll(() => {
-    vi.useRealTimers();
-  });
-
-  beforeEach(() => { });
-
-  afterEach(() => { });
-
-  test('can delay the execution of a function for any number of seconds', async () => {
-    const mockFn = vi.fn();
-    delay(10).then(mockFn);
-    expect(mockFn).not.toHaveBeenCalled();
-
-    await vi.advanceTimersByTimeAsync(11 * 1000);
-
-    expect(mockFn).toHaveBeenCalledOnce();
   });
 });

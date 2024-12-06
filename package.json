@@ -42,6 +42,7 @@
     "vitest": "^1.6.0"
   },
   "dependencies": {
-    "error-message-utils": "^1.1.2"
+    "error-message-utils": "^1.1.2",
+    "web-utils-kit": "^1.0.3"
   }
 }
