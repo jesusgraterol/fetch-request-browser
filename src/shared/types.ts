@@ -87,7 +87,7 @@ interface IOptions {
  */
 interface IRequestResponse {
   // the HTTP status code extracted from the Response
-  code: number,
+  code: number;
 
   // the Response's Headers. Useful as some service providers attach important info in the headers
   headers: Headers;

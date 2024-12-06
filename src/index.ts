@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { extractMessage } from 'error-message-utils';
 import {
   IRequestInput,
@@ -238,12 +239,12 @@ const sendDELETE = (
  ************************************************************************************************ */
 export {
   // types
-  IRequestInput,
-  IRequestMethod,
-  IRequestOptions,
-  IResponseDataType,
-  IOptions,
-  IRequestResponse,
+  type IRequestInput,
+  type IRequestMethod,
+  type IRequestOptions,
+  type IResponseDataType,
+  type IOptions,
+  type IRequestResponse,
 
   // implementation
   send,
