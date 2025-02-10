@@ -1,6 +1,6 @@
 {
   "name": "fetch-request-browser",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "The fetch-request-browser package makes working with external APIs simple and efficient. This intuitive wrapper leverages the power of the Fetch API, providing a clean and concise interface for your API interactions.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
