@@ -456,11 +456,15 @@ await sendPOST(
   <summary><code>IRequestOptions</code></summary>
 
   The options that can be applied when sending a Fetch Request.
-  IMPORTANT: the reason RequestInit is extended is because in the original type, the body property does not accept plain objects. Even though this makes sense,  utilities so the Request's body is always instantiated with a string.
+  IMPORTANT: the reason RequestInit is extended is because in the original type, the body property does not accept plain objects. Even though this makes sense,  utilities so the Request's body is always going to have a valid type.
   ```typescript
-  interface IRequestOptions extends RequestInit {
+  interface IRequestOptions extends Omit<RequestInit, 'body'> {
     method: IRequestMethod; // this lib only makes use of these methods
-    body: any;
+    body: BodyInit | Record<string, any> | null;
+  }
+  
+  interface IProcessedRequestOptions extends RequestInit {
+    method: IRequestMethod;
   }
   ```
 </details>

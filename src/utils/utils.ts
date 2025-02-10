@@ -1,4 +1,5 @@
 import { encodeError, isEncodedError } from 'error-message-utils';
+import { isArrayValid, isObjectValid } from 'web-utils-kit';
 import { ERRORS } from '../shared/errors.js';
 import {
   IRequestInput,
@@ -7,6 +8,7 @@ import {
   IRequestOptions,
   IRequestMethod,
   IOptions,
+  IProcessedRequestOptions,
 } from '../shared/types.js';
 
 /* ************************************************************************************************
@@ -75,11 +77,11 @@ const __buildRequestHeaders = (headers: any, method: IRequestMethod): Headers =>
 /**
  * Builds the body of the request in string format.
  * @param body
- * @returns string | null
+ * @returns BodyInit | null
  */
-const __buildRequestBody = (body: any): string | null => {
+const __buildRequestBody = (body: any): BodyInit | null => {
   if (body) {
-    if (typeof body === 'object') {
+    if (isObjectValid(body, true) || isArrayValid(body, true)) {
       return JSON.stringify(body);
     }
     return body;
@@ -89,27 +91,27 @@ const __buildRequestBody = (body: any): string | null => {
 
 /**
  * Builds the options for a request from a partial object.
- * @param options
+ * @param opts
  * @returns IRequestOptions
  * @throws
  * - INVALID_REQUEST_HEADERS: if invalid headers are passed in object format
  */
-const __buildRequestOptions = (options: Partial<IRequestOptions> = {}): IRequestOptions => {
-  const method: IRequestMethod = options.method ?? 'GET';
+const __buildRequestOptions = (opts: Partial<IRequestOptions> = {}): IProcessedRequestOptions => {
+  const method: IRequestMethod = opts.method ?? 'GET';
   return {
     method,
-    mode: options.mode ?? 'cors',
-    cache: options.cache ?? 'default',
-    credentials: options.credentials ?? 'same-origin',
-    headers: __buildRequestHeaders(options.headers, method),
-    priority: options.priority ?? 'auto',
-    redirect: options.redirect ?? 'follow',
-    referrer: options.referrer ?? 'about:client',
-    referrerPolicy: options.referrerPolicy ?? 'no-referrer-when-downgrade',
-    signal: options.signal,
-    integrity: options.integrity || '',
-    keepalive: options.keepalive ?? false,
-    body: method === 'GET' ? null : __buildRequestBody(options.body),
+    mode: opts.mode ?? 'cors',
+    cache: opts.cache ?? 'default',
+    credentials: opts.credentials ?? 'same-origin',
+    headers: __buildRequestHeaders(opts.headers, method),
+    priority: opts.priority ?? 'auto',
+    redirect: opts.redirect ?? 'follow',
+    referrer: opts.referrer ?? 'about:client',
+    referrerPolicy: opts.referrerPolicy ?? 'no-referrer-when-downgrade',
+    signal: opts.signal,
+    integrity: opts.integrity || '',
+    keepalive: opts.keepalive ?? false,
+    body: method === 'GET' ? null : __buildRequestBody(opts.body),
   };
 };
 
