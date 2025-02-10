@@ -416,15 +416,6 @@ await sendPOST(
 </details>
 
 <details>
-  <summary><code>IRequestMethod</code></summary>
-
-  The HTTP Methods supported by this library. To make use of a different one, pass the method name directly in the request options.
-  ```typescript
-  type IRequestMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
-  ```
-</details>
-
-<details>
   <summary><code>RequestInit</code></summary>
 
   The [`RequestInit`](https://developer.mozilla.org/en-US/docs/Web/API/RequestInit) dictionary of the Fetch API represents the set of options that can be used to configure a fetch request.
