@@ -3,10 +3,9 @@ import { isArrayValid, isObjectValid } from 'web-utils-kit';
 import { ERRORS } from '../shared/errors.js';
 import {
   IRequestInput,
-  IResponseDataType,
-  IResponseData,
   IRequestOptions,
   IRequestMethod,
+  IResponseDataType,
   IOptions,
   IProcessedRequestOptions,
 } from '../shared/types.js';
@@ -153,25 +152,25 @@ const buildRequest = (input: IRequestInput, options?: Partial<IRequestOptions>):
  * @throws
  * - INVALID_RESPONSE_DTYPE: if the data type is not supported by the Response Instance
  */
-const extractResponseData = async <T extends IResponseDataType>(
+const extractResponseData = async <T>(
   res: Response,
-  dType: T,
-): Promise<IResponseData<T>> => {
+  dType: IResponseDataType,
+): Promise<T> => {
   switch (dType) {
     case 'arrayBuffer': {
-      return res.arrayBuffer() as IResponseData<T>;
+      return res.arrayBuffer() as T;
     }
     case 'blob': {
-      return res.blob() as IResponseData<T>;
+      return res.blob() as T;
     }
     case 'formData': {
-      return res.formData() as IResponseData<T>;
+      return res.formData() as T;
     }
     case 'json': {
-      return res.json() as IResponseData<T>;
+      return res.json() as T;
     }
     case 'text': {
-      return res.text() as IResponseData<T>;
+      return res.text() as T;
     }
     default: {
       throw new Error(encodeError(`The provided response data type '${dType}' is invalid.`, ERRORS.INVALID_RESPONSE_DTYPE));

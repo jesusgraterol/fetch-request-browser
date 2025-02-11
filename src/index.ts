@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable no-console */
 import { extractMessage } from 'error-message-utils';
 import { isArrayValid, delay } from 'web-utils-kit';
@@ -25,12 +26,12 @@ import { validateResponse } from './validations/validations.js';
  * meant to be invoked by `send(...)`
  * @param input
  * @param options?
- * @returns Promise<IRequestResponse>
+ * @returns Promise<IRequestResponse<T>>
  */
-const __executeSend = async (
+const __executeSend = async <T>(
   input: IRequestInput,
   options?: Partial<IOptions>,
-): Promise<IRequestResponse> => {
+): Promise<IRequestResponse<T>> => {
   // build the options
   const opts = buildOptions(options);
 
@@ -52,7 +53,7 @@ const __executeSend = async (
   return {
     code: res.status,
     headers: res.headers,
-    data: await extractResponseData(res, opts.responseDataType),
+    data: await extractResponseData<T>(res, opts.responseDataType),
   };
 };
 
@@ -71,20 +72,20 @@ const __executeSend = async (
  * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers don't match
  * - INVALID_RESPONSE_DTYPE: if the data type is not supported by the Response Instance
  */
-const send = async (
+const send = async <T>(
   input: IRequestInput,
   options?: Partial<IOptions>,
   retryDelaySchedule?: number[],
-): Promise<IRequestResponse> => {
+): Promise<IRequestResponse<T>> => {
   try {
-    return await __executeSend(input, options);
+    return await __executeSend<T>(input, options);
   } catch (e) {
     // rethrow the err if there are no attempts left or the HTTP status code is 429 (too many reqs)
     if (extractMessage(e).includes('429') || !isArrayValid(retryDelaySchedule)) {
       throw e;
     }
     await delay(retryDelaySchedule[0]);
-    return send(input, options, retryDelaySchedule.slice(1));
+    return send<T>(input, options, retryDelaySchedule.slice(1));
   }
 };
 
@@ -106,17 +107,21 @@ const send = async (
  * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers don't match
  * - INVALID_RESPONSE_DTYPE: if the data type is not supported by the Response Instance
  */
-const sendGET = async (
+const sendGET = <T>(
   input: IRequestInput,
   options?: Partial<IOptions>,
   retryDelaySchedule?: number[],
-): Promise<IRequestResponse> => send(input, {
-  ...options,
-  requestOptions: {
-    ...options?.requestOptions,
-    method: 'GET',
+): Promise<IRequestResponse<T>> => send<T>(
+  input,
+  {
+    ...options,
+    requestOptions: {
+      ...options?.requestOptions,
+      method: 'GET',
+    },
   },
-}, retryDelaySchedule);
+  retryDelaySchedule,
+);
 
 /**
  * Builds and sends a POST HTTP Request based on the provided input and options.
@@ -133,17 +138,21 @@ const sendGET = async (
  * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers don't match
  * - INVALID_RESPONSE_DTYPE: if the data type is not supported by the Response Instance
  */
-const sendPOST = (
+const sendPOST = <T>(
   input: IRequestInput,
   options?: Partial<IOptions>,
   retryDelaySchedule?: number[],
-): Promise<IRequestResponse> => send(input, {
-  ...options,
-  requestOptions: {
-    ...options?.requestOptions,
-    method: 'POST',
+): Promise<IRequestResponse<T>> => send<T>(
+  input,
+  {
+    ...options,
+    requestOptions: {
+      ...options?.requestOptions,
+      method: 'POST',
+    },
   },
-}, retryDelaySchedule);
+  retryDelaySchedule,
+);
 
 /**
  * Builds and sends a PUT HTTP Request based on the provided input and options.
@@ -160,17 +169,21 @@ const sendPOST = (
  * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers don't match
  * - INVALID_RESPONSE_DTYPE: if the data type is not supported by the Response Instance
  */
-const sendPUT = (
+const sendPUT = <T>(
   input: IRequestInput,
   options?: Partial<IOptions>,
   retryDelaySchedule?: number[],
-): Promise<IRequestResponse> => send(input, {
-  ...options,
-  requestOptions: {
-    ...options?.requestOptions,
-    method: 'PUT',
+): Promise<IRequestResponse<T>> => send<T>(
+  input,
+  {
+    ...options,
+    requestOptions: {
+      ...options?.requestOptions,
+      method: 'PUT',
+    },
   },
-}, retryDelaySchedule);
+  retryDelaySchedule,
+);
 
 /**
  * Builds and sends a PATCH HTTP Request based on the provided input and options.
@@ -187,17 +200,21 @@ const sendPUT = (
  * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers don't match
  * - INVALID_RESPONSE_DTYPE: if the data type is not supported by the Response Instance
  */
-const sendPATCH = (
+const sendPATCH = <T>(
   input: IRequestInput,
   options?: Partial<IOptions>,
   retryDelaySchedule?: number[],
-): Promise<IRequestResponse> => send(input, {
-  ...options,
-  requestOptions: {
-    ...options?.requestOptions,
-    method: 'PATCH',
+): Promise<IRequestResponse<T>> => send<T>(
+  input,
+  {
+    ...options,
+    requestOptions: {
+      ...options?.requestOptions,
+      method: 'PATCH',
+    },
   },
-}, retryDelaySchedule);
+  retryDelaySchedule,
+);
 
 /**
  * Builds and sends a DELETE HTTP Request based on the provided input and options.
@@ -214,17 +231,21 @@ const sendPATCH = (
  * - CONTENT_TYPE_MISSMATCH: if the Content-Type Headers don't match
  * - INVALID_RESPONSE_DTYPE: if the data type is not supported by the Response Instance
  */
-const sendDELETE = (
+const sendDELETE = <T>(
   input: IRequestInput,
   options?: Partial<IOptions>,
   retryDelaySchedule?: number[],
-): Promise<IRequestResponse> => send(input, {
-  ...options,
-  requestOptions: {
-    ...options?.requestOptions,
-    method: 'DELETE',
+): Promise<IRequestResponse<T>> => send<T>(
+    input,
+    {
+      ...options,
+      requestOptions: {
+        ...options?.requestOptions,
+        method: 'DELETE',
+      },
   },
-}, retryDelaySchedule);
+  retryDelaySchedule,
+);
 
 
 
