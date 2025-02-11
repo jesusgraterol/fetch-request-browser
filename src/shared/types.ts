@@ -19,7 +19,7 @@ type IRequestInput = string | URL;
  */
 interface IRequestOptions extends Omit<RequestInit, 'body'> {
   method: IRequestMethod; // this lib only makes use of these methods
-  body: BodyInit | Record<string, any> | null;
+  body: BodyInit | Record<string, unknown> | Array<unknown> | null;
 }
 interface IProcessedRequestOptions extends RequestInit {
   method: IRequestMethod;
