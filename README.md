@@ -34,6 +34,7 @@ await sendGET<IHTTPBinResponse>(
 );
 // {
 //   code: 200,
+//   statusText: 'OK',
 //   headers: Headers {
 //     date: 'Fri, 06 Dec 2024 14:14:12 GMT',
 //     'content-type': 'application/json',
@@ -81,6 +82,7 @@ await sendPOST<IHTTPBinResponse>(
 );
 // {
 //   code: 200,
+//   statusText: 'OK',
 //   headers: Headers {
 //     date: 'Fri, 06 Dec 2024 12:57:25 GMT',
 //     'content-type': 'application/json',
@@ -133,6 +135,7 @@ await sendPOST<IHTTPBinResponse>(
   );
   // {
   //   code: 200,
+  //   statusText: 'OK',
   //   headers: Headers {
   //     date: 'Fri, 06 Dec 2024 13:05:20 GMT',
   //     'content-type': 'application/json',
@@ -168,6 +171,7 @@ await sendPOST<IHTTPBinResponse>(
   await sendGET<IHTTPBinResponse>('https://httpbin.org/get?foo=hey&bar=123');
   // {
   //   code: 200,
+  //   statusText: 'OK',
   //   headers: Headers {
   //     date: 'Fri, 06 Dec 2024 13:05:20 GMT',
   //     'content-type': 'application/json',
@@ -213,6 +217,7 @@ await sendPOST<IHTTPBinResponse>(
   );
   // {
   //   code: 200,
+  //   statusText: 'OK',
   //   headers: Headers {
   //     date: 'Fri, 06 Dec 2024 13:13:18 GMT',
   //     'content-type': 'application/json',
@@ -264,6 +269,7 @@ await sendPOST<IHTTPBinResponse>(
   );
   // {
   //   code: 200,
+  //   statusText: 'OK',
   //   headers: Headers {
   //     date: 'Fri, 06 Dec 2024 13:19:07 GMT',
   //     'content-type': 'application/json',
@@ -315,6 +321,7 @@ await sendPOST<IHTTPBinResponse>(
   );
   // {
   //   code: 200,
+  //   statusText: 'OK',
   //   headers: Headers {
   //     date: 'Fri, 06 Dec 2024 13:22:54 GMT',
   //     'content-type': 'application/json',
@@ -356,6 +363,7 @@ await sendPOST<IHTTPBinResponse>(
   await sendDELETE<IHTTPBinResponse>('https://httpbin.org/delete?id=1');
   // {
   //   code: 200,
+  //   statusText: 'OK',
   //   headers: Headers {
   //     date: 'Fri, 06 Dec 2024 13:25:41 GMT',
   //     'content-type': 'application/json',
@@ -517,6 +525,9 @@ await sendPOST<IHTTPBinResponse>(
   interface IRequestResponse<T> {
     // the HTTP status code extracted from the Response
     code: number;
+
+    // the message associated with the status code
+    statusText: string;
 
     // the Response's Headers. Useful as some service providers attach important info in the headers
     headers: Headers;

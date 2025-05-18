@@ -82,6 +82,9 @@ interface IRequestResponse<T> {
   // the HTTP status code extracted from the Response
   code: number;
 
+  // the message associated with the status code
+  statusText: string;
+
   // the Response's Headers. Useful as some service providers attach important info in the headers
   headers: Headers;
 

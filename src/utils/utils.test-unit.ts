@@ -1,18 +1,18 @@
 import { describe, test, expect, vi } from 'vitest';
 import { IRequestOptions, IResponseDataType } from '../shared/types.js';
 import { ERRORS } from '../shared/errors.js';
-import { buildOptions, buildRequest, extractResponseData } from './utils.js';
+import { buildOptions, buildRequest, extractErrorMessageFromResponseBody, extractResponseData } from './utils.js';
 
 /* ************************************************************************************************
  *                                            HELPERS                                             *
  ************************************************************************************************ */
 
-const rs = (): Response => (<any>{
-  arrayBuffer: vi.fn(() => Promise.resolve()),
-  blob: vi.fn(() => Promise.resolve()),
-  formData: vi.fn(() => Promise.resolve()),
-  json: vi.fn(() => Promise.resolve()),
-  text: vi.fn(() => Promise.resolve()),
+const rs = (data?: any): Response => (<any>{
+  arrayBuffer: vi.fn(() => Promise.resolve(data)),
+  blob: vi.fn(() => Promise.resolve(data)),
+  formData: vi.fn(() => Promise.resolve(data)),
+  json: vi.fn(() => Promise.resolve(data)),
+  text: vi.fn(() => Promise.resolve(data)),
 });
 
 
@@ -183,6 +183,39 @@ describe('extractResponseData', () => {
 
   test('throws an error if an invalid dtype is provided', async () => {
     await expect(() => extractResponseData(rs(), <IResponseDataType>'nonsense')).rejects.toThrowError(ERRORS.INVALID_RESPONSE_DTYPE);
+  });
+});
+
+
+
+
+
+describe('extractErrorMessageFromResponseBody', () => {
+  test.each([
+    [undefined, undefined],
+    ['The error message could not be extracted, check the logs for more information.', undefined], // default error message in error-message-utils package
+    [{
+      status: 400,
+      name: 'BadRequestError',
+      message: "The provided locale 'e' is invalid. Accepted values are: en, fr.{(INVALID_LOCALE)}",
+      details: {},
+    }, 'The provided locale \'e\' is invalid. Accepted values are: en, fr.{(INVALID_LOCALE)}'],
+    [{
+      data: null,
+      error: {
+        status: 400,
+        name: 'BadRequestError',
+        message: "The provided locale 'e' is invalid. Accepted values are: en, fr.{(INVALID_LOCALE)}",
+        details: {},
+      },
+    }, 'The provided locale \'e\' is invalid. Accepted values are: en, fr.{(INVALID_LOCALE)}'],
+  ])('extractErrorMessageFromResponseBody(%o) -> %s', async (body, expected) => {
+    await expect(extractErrorMessageFromResponseBody(rs(body))).resolves.toBe(expected);
+  });
+
+  test('returns undefined if the body cannot be parsed', async () => {
+    const res = vi.fn(() => ({ json: Promise.reject(new Error('Invalid JSON')) })) as unknown as Response;
+    await expect(extractErrorMessageFromResponseBody(res)).resolves.toBeUndefined();
   });
 });
 
