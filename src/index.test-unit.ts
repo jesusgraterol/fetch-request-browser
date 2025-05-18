@@ -35,11 +35,13 @@ describe('fetch-request', () => {
       const data = { success: true };
       vi.stubGlobal('fetch', vi.fn(async () => ({
         status: 200,
+        statusText: 'OK',
         headers,
         json: () => Promise.resolve(data),
       })));
       await expect(send('https://www.google.com')).resolves.toStrictEqual({
         code: 200,
+        statusText: 'OK',
         headers,
         data,
       });

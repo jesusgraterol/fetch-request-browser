@@ -8,9 +8,10 @@ import { sendDELETE, sendGET, sendPATCH, sendPOST, sendPUT } from './index.js';
 describe('sendGET', () => {
   test('can send a GET request', async () => {
     const url = 'https://httpbin.org/get';
-    const { code, headers, data } = await sendGET<any>(url);
+    const { code, statusText, headers, data } = await sendGET<any>(url);
 
     expect(code).toBe(200);
+    expect(statusText).toBe('OK');
 
     expect(headers.get('Content-Type')).toBe('application/json');
 
@@ -24,9 +25,10 @@ describe('sendGET', () => {
 
   test('can send a GET request w/ query string', async () => {
     const url = 'https://httpbin.org/get?foo=hey&bar=123';
-    const { code, headers, data } = await sendGET<any>(url);
+    const { code, statusText, headers, data } = await sendGET<any>(url);
 
     expect(code).toBe(200);
+    expect(statusText).toBe('OK');
 
     expect(headers.get('Content-Type')).toBe('application/json');
 
@@ -49,9 +51,15 @@ describe('sendPOST', () => {
       someKey: 'Hello',
       someNumber: 123456,
     };
-    const { code, headers, data } = await sendPOST<any>(url, { requestOptions: { body } });
+    const {
+      code,
+      statusText,
+      headers,
+      data,
+    } = await sendPOST<any>(url, { requestOptions: { body } });
 
     expect(code).toBe(200);
+    expect(statusText).toBe('OK');
 
     expect(headers.get('Content-Type')).toBe('application/json');
 
@@ -76,9 +84,15 @@ describe('sendPUT', () => {
       someKey: 'Hello',
       someNumber: 123456,
     };
-    const { code, headers, data } = await sendPUT<any>(url, { requestOptions: { body } });
+    const {
+      code,
+      statusText,
+      headers,
+      data,
+    } = await sendPUT<any>(url, { requestOptions: { body } });
 
     expect(code).toBe(200);
+    expect(statusText).toBe('OK');
 
     expect(headers.get('Content-Type')).toBe('application/json');
 
@@ -103,9 +117,15 @@ describe('sendPATCH', () => {
       someKey: 'Hello',
       someNumber: 123456,
     };
-    const { code, headers, data } = await sendPATCH<any>(url, { requestOptions: { body } });
+    const {
+      code,
+      statusText,
+      headers,
+      data,
+    } = await sendPATCH<any>(url, { requestOptions: { body } });
 
     expect(code).toBe(200);
+    expect(statusText).toBe('OK');
 
     expect(headers.get('Content-Type')).toBe('application/json');
 
@@ -126,9 +146,10 @@ describe('sendPATCH', () => {
 describe('sendDELETE', () => {
   test('can send a DELETE request without a body', async () => {
     const url = 'https://httpbin.org/delete';
-    const { code, headers, data } = await sendDELETE<any>(url);
+    const { code, statusText, headers, data } = await sendDELETE<any>(url);
 
     expect(code).toBe(200);
+    expect(statusText).toBe('OK');
 
     expect(headers.get('Content-Type')).toBe('application/json');
 
@@ -147,9 +168,15 @@ describe('sendDELETE', () => {
       someKey: 'Hello',
       someNumber: 123456,
     };
-    const { code, headers, data } = await sendDELETE<any>(url, { requestOptions: { body } });
+    const {
+      code,
+      statusText,
+      headers,
+      data,
+    } = await sendDELETE<any>(url, { requestOptions: { body } });
 
     expect(code).toBe(200);
+    expect(statusText).toBe('OK');
 
     expect(headers.get('Content-Type')).toBe('application/json');
 
