@@ -1,4 +1,9 @@
-import { encodeError, isEncodedError } from 'error-message-utils';
+import {
+  encodeError,
+  extractMessage,
+  isDefaultErrorMessage,
+  isEncodedError,
+} from 'error-message-utils';
 import { isArrayValid, isObjectValid } from 'web-utils-kit';
 import { ERRORS } from '../shared/errors.js';
 import {
@@ -178,6 +183,23 @@ const extractResponseData = async <T>(
   }
 };
 
+/**
+ * Attempts to extract the error message from the response object. If it fails, it returns
+ * undefined.
+ * @param res
+ * @returns Promise<string | undefined>
+ * @stable
+ */
+const extractErrorMessageFromResponseBody = async (res: Response): Promise<string | undefined> => {
+  try {
+    const erroredBody = await res.json();
+    const message = extractMessage(erroredBody);
+    return isDefaultErrorMessage(message) ? undefined : message;
+  } catch (e) {
+    return undefined;
+  }
+};
+
 
 
 
@@ -212,6 +234,7 @@ export {
 
   // response helpers
   extractResponseData,
+  extractErrorMessageFromResponseBody,
 
   // misc helpers
   buildOptions,
