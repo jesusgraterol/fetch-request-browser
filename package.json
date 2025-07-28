@@ -1,12 +1,12 @@
 {
   "name": "fetch-request-browser",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "The fetch-request-browser package makes working with external APIs simple and efficient. This intuitive wrapper leverages the power of the Fetch API, providing a clean and concise interface for your API interactions.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
-    "start": "ts-lib-builder --tsconfig=tsconfig.build.json",
+    "build": "ts-lib-builder --tsconfig=tsconfig.build.json",
     "test": "echo \"Error: tests are executed with  npm run test:(integration|unit)\" && exit 1",
     "test:integration": "vitest run --config vitest.test-integration.config.ts",
     "test:unit": "vitest run --config vitest.test-unit.config.ts",
@@ -33,16 +33,18 @@
   },
   "homepage": "https://github.com/jesusgraterol/fetch-request-browser#readme",
   "devDependencies": {
-    "@types/node": "^20.17.17",
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@typescript-eslint/parser": "^7.18.0",
-    "eslint-config-airbnb-typescript": "^18.0.0",
-    "ts-lib-builder": "^1.0.5",
-    "typescript": "^5.7.3",
-    "vitest": "^1.6.1"
+    "@types/node": "20.17.17",
+    "@typescript-eslint/eslint-plugin": "7.18.0",
+    "@typescript-eslint/parser": "7.18.0",
+    "eslint-config-airbnb-typescript": "18.0.0",
+    "eslint-config-prettier": "10.1.8",
+    "prettier": "3.6.2",
+    "ts-lib-builder": "1.0.7",
+    "typescript": "5.7.3",
+    "vitest": "3.2.4"
   },
   "dependencies": {
-    "error-message-utils": "^1.1.3",
-    "web-utils-kit": "^1.0.5"
+    "error-message-utils": "1.1.5",
+    "web-utils-kit": "1.0.6"
   }
 }

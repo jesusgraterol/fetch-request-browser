@@ -22,7 +22,6 @@ describe('sendGET', () => {
     expect(data.url).toBe(url);
   }, 60000);
 
-
   test('can send a GET request w/ query string', async () => {
     const url = 'https://httpbin.org/get?foo=hey&bar=123';
     const { code, statusText, headers, data } = await sendGET<any>(url);
@@ -40,10 +39,6 @@ describe('sendGET', () => {
   }, 60000);
 });
 
-
-
-
-
 describe('sendPOST', () => {
   test('can send a POST request with a body', async () => {
     const url = 'https://httpbin.org/post';
@@ -51,12 +46,9 @@ describe('sendPOST', () => {
       someKey: 'Hello',
       someNumber: 123456,
     };
-    const {
-      code,
-      statusText,
-      headers,
-      data,
-    } = await sendPOST<any>(url, { requestOptions: { body } });
+    const { code, statusText, headers, data } = await sendPOST<any>(url, {
+      requestOptions: { body },
+    });
 
     expect(code).toBe(200);
     expect(statusText).toBe('OK');
@@ -72,10 +64,6 @@ describe('sendPOST', () => {
     expect(data.url).toBe(url);
   }, 60000);
 });
-
-
-
-
 
 describe('sendPUT', () => {
   test('can send a PUT request with a body', async () => {
@@ -84,12 +72,9 @@ describe('sendPUT', () => {
       someKey: 'Hello',
       someNumber: 123456,
     };
-    const {
-      code,
-      statusText,
-      headers,
-      data,
-    } = await sendPUT<any>(url, { requestOptions: { body } });
+    const { code, statusText, headers, data } = await sendPUT<any>(url, {
+      requestOptions: { body },
+    });
 
     expect(code).toBe(200);
     expect(statusText).toBe('OK');
@@ -105,10 +90,6 @@ describe('sendPUT', () => {
     expect(data.url).toBe(url);
   }, 60000);
 });
-
-
-
-
 
 describe('sendPATCH', () => {
   test('can send a PATCH request with a body', async () => {
@@ -117,12 +98,9 @@ describe('sendPATCH', () => {
       someKey: 'Hello',
       someNumber: 123456,
     };
-    const {
-      code,
-      statusText,
-      headers,
-      data,
-    } = await sendPATCH<any>(url, { requestOptions: { body } });
+    const { code, statusText, headers, data } = await sendPATCH<any>(url, {
+      requestOptions: { body },
+    });
 
     expect(code).toBe(200);
     expect(statusText).toBe('OK');
@@ -138,10 +116,6 @@ describe('sendPATCH', () => {
     expect(data.url).toBe(url);
   }, 60000);
 });
-
-
-
-
 
 describe('sendDELETE', () => {
   test('can send a DELETE request without a body', async () => {
@@ -168,12 +142,9 @@ describe('sendDELETE', () => {
       someKey: 'Hello',
       someNumber: 123456,
     };
-    const {
-      code,
-      statusText,
-      headers,
-      data,
-    } = await sendDELETE<any>(url, { requestOptions: { body } });
+    const { code, statusText, headers, data } = await sendDELETE<any>(url, {
+      requestOptions: { body },
+    });
 
     expect(code).toBe(200);
     expect(statusText).toBe('OK');

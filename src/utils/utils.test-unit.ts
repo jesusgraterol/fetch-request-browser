@@ -1,23 +1,25 @@
 import { describe, test, expect, vi } from 'vitest';
 import { IRequestOptions, IResponseDataType } from '../shared/types.js';
 import { ERRORS } from '../shared/errors.js';
-import { buildOptions, buildRequest, extractErrorMessageFromResponseBody, extractResponseData } from './utils.js';
+import {
+  buildOptions,
+  buildRequest,
+  extractErrorMessageFromResponseBody,
+  extractResponseData,
+} from './utils.js';
 
 /* ************************************************************************************************
  *                                            HELPERS                                             *
  ************************************************************************************************ */
 
-const rs = (data?: any): Response => (<any>{
-  arrayBuffer: vi.fn(() => Promise.resolve(data)),
-  blob: vi.fn(() => Promise.resolve(data)),
-  formData: vi.fn(() => Promise.resolve(data)),
-  json: vi.fn(() => Promise.resolve(data)),
-  text: vi.fn(() => Promise.resolve(data)),
-});
-
-
-
-
+const rs = (data?: any): Response =>
+  <any>{
+    arrayBuffer: vi.fn(() => Promise.resolve(data)),
+    blob: vi.fn(() => Promise.resolve(data)),
+    formData: vi.fn(() => Promise.resolve(data)),
+    json: vi.fn(() => Promise.resolve(data)),
+    text: vi.fn(() => Promise.resolve(data)),
+  };
 
 /* ************************************************************************************************
  *                                             TESTS                                              *
@@ -37,9 +39,11 @@ describe('buildRequest', () => {
     expect(req.integrity).toBe('');
     expect(req.keepalive).toBe(false);
     expect(req.body).toBeNull();
-    expect(req.headers).toEqual(new Headers({
-      Accept: 'application/json',
-    }));
+    expect(req.headers).toEqual(
+      new Headers({
+        Accept: 'application/json',
+      }),
+    );
   });
 
   test('can instantiate a Request with custom options', async () => {
@@ -66,10 +70,12 @@ describe('buildRequest', () => {
     expect(req.integrity).toBe('sha256-BpfBw7ivV8q2jLiT13fxDYAe2tJllusRSZ273h2nFSE=');
     expect(req.keepalive).toBe(true);
     await expect(new Response(req.body).json()).resolves.toStrictEqual({ some: 'coolData' });
-    expect(req.headers).toStrictEqual(new Headers({
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    }));
+    expect(req.headers).toStrictEqual(
+      new Headers({
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }),
+    );
   });
 
   test('can use an URL instance rather than a string', () => {
@@ -91,22 +97,30 @@ describe('buildRequest', () => {
     const headers = new Headers({
       Authorization: 'bearer 123456',
     });
-    expect(buildRequest('https://www.mozilla.org/favicon.ico', { headers }).headers).toStrictEqual(new Headers({
-      Accept: 'application/json',
-      Authorization: 'bearer 123456',
-    }));
+    expect(buildRequest('https://www.mozilla.org/favicon.ico', { headers }).headers).toStrictEqual(
+      new Headers({
+        Accept: 'application/json',
+        Authorization: 'bearer 123456',
+      }),
+    );
   });
 
   test('includes the Content-Type Header if it is not provided and the req has a body', () => {
     const headers = new Headers({
       Authorization: 'bearer 123456',
     });
-    const req = buildRequest('https://www.mozilla.org/favicon.ico', { method: 'POST', headers, body: { foo: 'bar' } });
-    expect(req.headers).toStrictEqual(new Headers({
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: 'bearer 123456',
-    }));
+    const req = buildRequest('https://www.mozilla.org/favicon.ico', {
+      method: 'POST',
+      headers,
+      body: { foo: 'bar' },
+    });
+    expect(req.headers).toStrictEqual(
+      new Headers({
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: 'bearer 123456',
+      }),
+    );
   });
 
   test('headers are case insensitive', () => {
@@ -146,23 +160,17 @@ describe('buildRequest', () => {
   });
 
   test('throws when invalid headers are provided', () => {
-    expect(() => buildRequest(
-      'https://www.mozilla.org',
-      { headers: { 'Content Type': 'application/json' } },
-    )).toThrowError(ERRORS.INVALID_REQUEST_HEADERS);
+    expect(() =>
+      buildRequest('https://www.mozilla.org', { headers: { 'Content Type': 'application/json' } }),
+    ).toThrowError(ERRORS.INVALID_REQUEST_HEADERS);
   });
 
   test('throws when invalid options are provided', () => {
-    expect(() => buildRequest(
-      'https://www.mozilla.org',
-      { mode: <RequestMode>'invalid-mode' },
-    )).toThrowError(ERRORS.INVALID_REQUEST_OPTIONS);
+    expect(() =>
+      buildRequest('https://www.mozilla.org', { mode: <RequestMode>'invalid-mode' }),
+    ).toThrowError(ERRORS.INVALID_REQUEST_OPTIONS);
   });
 });
-
-
-
-
 
 describe('extractResponseData', () => {
   test('can extract any data type', async () => {
@@ -182,46 +190,50 @@ describe('extractResponseData', () => {
   });
 
   test('throws an error if an invalid dtype is provided', async () => {
-    await expect(() => extractResponseData(rs(), <IResponseDataType>'nonsense')).rejects.toThrowError(ERRORS.INVALID_RESPONSE_DTYPE);
+    await expect(() =>
+      extractResponseData(rs(), <IResponseDataType>'nonsense'),
+    ).rejects.toThrowError(ERRORS.INVALID_RESPONSE_DTYPE);
   });
 });
-
-
-
-
 
 describe('extractErrorMessageFromResponseBody', () => {
   test.each([
     [undefined, undefined],
     ['The error message could not be extracted, check the logs for more information.', undefined], // default error message in error-message-utils package
-    [{
-      status: 400,
-      name: 'BadRequestError',
-      message: "The provided locale 'e' is invalid. Accepted values are: en, fr.{(INVALID_LOCALE)}",
-      details: {},
-    }, 'The provided locale \'e\' is invalid. Accepted values are: en, fr.{(INVALID_LOCALE)}'],
-    [{
-      data: null,
-      error: {
+    [
+      {
         status: 400,
         name: 'BadRequestError',
-        message: "The provided locale 'e' is invalid. Accepted values are: en, fr.{(INVALID_LOCALE)}",
+        message:
+          "The provided locale 'e' is invalid. Accepted values are: en, fr.{(INVALID_LOCALE)}",
         details: {},
       },
-    }, 'The provided locale \'e\' is invalid. Accepted values are: en, fr.{(INVALID_LOCALE)}'],
+      "The provided locale 'e' is invalid. Accepted values are: en, fr.{(INVALID_LOCALE)}",
+    ],
+    [
+      {
+        data: null,
+        error: {
+          status: 400,
+          name: 'BadRequestError',
+          message:
+            "The provided locale 'e' is invalid. Accepted values are: en, fr.{(INVALID_LOCALE)}",
+          details: {},
+        },
+      },
+      "The provided locale 'e' is invalid. Accepted values are: en, fr.{(INVALID_LOCALE)}",
+    ],
   ])('extractErrorMessageFromResponseBody(%o) -> %s', async (body, expected) => {
     await expect(extractErrorMessageFromResponseBody(rs(body))).resolves.toBe(expected);
   });
 
   test('returns undefined if the body cannot be parsed', async () => {
-    const res = vi.fn(() => ({ json: Promise.reject(new Error('Invalid JSON')) })) as unknown as Response;
+    const res = vi.fn(() => ({
+      json: Promise.reject(new Error('Invalid JSON')),
+    })) as unknown as Response;
     await expect(extractErrorMessageFromResponseBody(res)).resolves.toBeUndefined();
   });
 });
-
-
-
-
 
 describe('buildOptions', () => {
   test('can build the default options object', () => {
@@ -240,13 +252,15 @@ describe('buildOptions', () => {
       headers: { 'Content-Type': 'text/html' },
     };
     const range = { min: 100, max: 499 };
-    expect(buildOptions({
-      requestOptions: reqOptions,
-      responseDataType: 'text',
-      acceptableStatusCodes: [200, 201],
-      acceptableStatusCodesRange: range,
-      skipStatusCodeValidation: true,
-    })).toStrictEqual({
+    expect(
+      buildOptions({
+        requestOptions: reqOptions,
+        responseDataType: 'text',
+        acceptableStatusCodes: [200, 201],
+        acceptableStatusCodesRange: range,
+        skipStatusCodeValidation: true,
+      }),
+    ).toStrictEqual({
       requestOptions: reqOptions,
       responseDataType: 'text',
       acceptableStatusCodes: [200, 201],

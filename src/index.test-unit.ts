@@ -13,12 +13,12 @@ const mFetch = (): Mock => fetch as Mock;
 const getFetchCallArg = (callIndex: number): any => {
   const mockedFn = mFetch();
   if (mockedFn.mock.calls.length < callIndex + 1) {
-    throw new Error(`The mock function was only called ${mockedFn.mock.calls.length} times. Attempted to access call # ${callIndex + 1}`);
+    throw new Error(
+      `The mock function was only called ${mockedFn.mock.calls.length} times. Attempted to access call # ${callIndex + 1}`,
+    );
   }
   return mockedFn.mock.calls[callIndex][0];
 };
-
-
 
 /* ************************************************************************************************
  *                                             TESTS                                              *
@@ -33,12 +33,15 @@ describe('fetch-request', () => {
     test('can send a request with default options', async () => {
       const headers = new Headers({ 'Content-Type': 'application/json' });
       const data = { success: true };
-      vi.stubGlobal('fetch', vi.fn(async () => ({
-        status: 200,
-        statusText: 'OK',
-        headers,
-        json: () => Promise.resolve(data),
-      })));
+      vi.stubGlobal(
+        'fetch',
+        vi.fn(async () => ({
+          status: 200,
+          statusText: 'OK',
+          headers,
+          json: () => Promise.resolve(data),
+        })),
+      );
       await expect(send('https://www.google.com')).resolves.toStrictEqual({
         code: 200,
         statusText: 'OK',
@@ -50,8 +53,6 @@ describe('fetch-request', () => {
     });
   });
 
-
-
   describe('sendGET', () => {
     afterEach(() => {
       vi.useRealTimers();
@@ -61,14 +62,18 @@ describe('fetch-request', () => {
       vi.useFakeTimers();
       vi.stubGlobal(
         'fetch',
-        vi.fn().mockImplementationOnce(() => Promise.resolve({ status: 500 }))
+        vi
+          .fn()
           .mockImplementationOnce(() => Promise.resolve({ status: 500 }))
           .mockImplementationOnce(() => Promise.resolve({ status: 500 }))
-          .mockImplementationOnce(() => Promise.resolve({
-            status: 200,
-            headers: new Headers({ 'Content-Type': 'application/json' }),
-            json: () => Promise.resolve({}),
-          })),
+          .mockImplementationOnce(() => Promise.resolve({ status: 500 }))
+          .mockImplementationOnce(() =>
+            Promise.resolve({
+              status: 200,
+              headers: new Headers({ 'Content-Type': 'application/json' }),
+              json: () => Promise.resolve({}),
+            }),
+          ),
       );
       expect(fetch).not.toHaveBeenCalled();
 

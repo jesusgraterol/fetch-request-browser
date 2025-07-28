@@ -50,7 +50,9 @@ const __executeSend = async <T>(
 
     // print a warning in case the request was redirected
     if (res.redirected) {
-      console.warn(`The request sent to '${req.url}' was redirected. Please update the implementation to avoid future redirections.`);
+      console.warn(
+        `The request sent to '${req.url}' was redirected. Please update the implementation to avoid future redirections.`,
+      );
     }
 
     // return the request's response
@@ -123,17 +125,18 @@ const sendGET = <T>(
   input: IRequestInput,
   options?: Partial<IOptions>,
   retryDelaySchedule?: number[],
-): Promise<IRequestResponse<T>> => send<T>(
-  input,
-  {
-    ...options,
-    requestOptions: {
-      ...options?.requestOptions,
-      method: 'GET',
+): Promise<IRequestResponse<T>> =>
+  send<T>(
+    input,
+    {
+      ...options,
+      requestOptions: {
+        ...options?.requestOptions,
+        method: 'GET',
+      },
     },
-  },
-  retryDelaySchedule,
-);
+    retryDelaySchedule,
+  );
 
 /**
  * Builds and sends a POST HTTP Request based on the provided input and options.
@@ -154,17 +157,18 @@ const sendPOST = <T>(
   input: IRequestInput,
   options?: Partial<IOptions>,
   retryDelaySchedule?: number[],
-): Promise<IRequestResponse<T>> => send<T>(
-  input,
-  {
-    ...options,
-    requestOptions: {
-      ...options?.requestOptions,
-      method: 'POST',
+): Promise<IRequestResponse<T>> =>
+  send<T>(
+    input,
+    {
+      ...options,
+      requestOptions: {
+        ...options?.requestOptions,
+        method: 'POST',
+      },
     },
-  },
-  retryDelaySchedule,
-);
+    retryDelaySchedule,
+  );
 
 /**
  * Builds and sends a PUT HTTP Request based on the provided input and options.
@@ -185,17 +189,18 @@ const sendPUT = <T>(
   input: IRequestInput,
   options?: Partial<IOptions>,
   retryDelaySchedule?: number[],
-): Promise<IRequestResponse<T>> => send<T>(
-  input,
-  {
-    ...options,
-    requestOptions: {
-      ...options?.requestOptions,
-      method: 'PUT',
+): Promise<IRequestResponse<T>> =>
+  send<T>(
+    input,
+    {
+      ...options,
+      requestOptions: {
+        ...options?.requestOptions,
+        method: 'PUT',
+      },
     },
-  },
-  retryDelaySchedule,
-);
+    retryDelaySchedule,
+  );
 
 /**
  * Builds and sends a PATCH HTTP Request based on the provided input and options.
@@ -216,17 +221,18 @@ const sendPATCH = <T>(
   input: IRequestInput,
   options?: Partial<IOptions>,
   retryDelaySchedule?: number[],
-): Promise<IRequestResponse<T>> => send<T>(
-  input,
-  {
-    ...options,
-    requestOptions: {
-      ...options?.requestOptions,
-      method: 'PATCH',
+): Promise<IRequestResponse<T>> =>
+  send<T>(
+    input,
+    {
+      ...options,
+      requestOptions: {
+        ...options?.requestOptions,
+        method: 'PATCH',
+      },
     },
-  },
-  retryDelaySchedule,
-);
+    retryDelaySchedule,
+  );
 
 /**
  * Builds and sends a DELETE HTTP Request based on the provided input and options.
@@ -247,7 +253,8 @@ const sendDELETE = <T>(
   input: IRequestInput,
   options?: Partial<IOptions>,
   retryDelaySchedule?: number[],
-): Promise<IRequestResponse<T>> => send<T>(
+): Promise<IRequestResponse<T>> =>
+  send<T>(
     input,
     {
       ...options,
@@ -255,13 +262,9 @@ const sendDELETE = <T>(
         ...options?.requestOptions,
         method: 'DELETE',
       },
-  },
-  retryDelaySchedule,
-);
-
-
-
-
+    },
+    retryDelaySchedule,
+  );
 
 /* ************************************************************************************************
  *                                         MODULE EXPORTS                                         *

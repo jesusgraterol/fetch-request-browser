@@ -1,4 +1,3 @@
-
 import { encodeError } from 'error-message-utils';
 import { IOptions } from '../shared/types.js';
 import { ERRORS } from '../shared/errors.js';
@@ -12,7 +11,11 @@ import { ERRORS } from '../shared/errors.js';
  * @param res
  * @returns string
  */
-const __buildUnexpectedCodeErrorMessage = (res: Response): string => encodeError(`Request Failed: received unexpected response code '${res.status}': ${res.statusText}`, ERRORS.UNEXPECTED_RESPONSE_STATUS_CODE);
+const __buildUnexpectedCodeErrorMessage = (res: Response): string =>
+  encodeError(
+    `Request Failed: received unexpected response code '${res.status}': ${res.statusText}`,
+    ERRORS.UNEXPECTED_RESPONSE_STATUS_CODE,
+  );
 
 /**
  * Validates the Response's status code. Note that if the acceptableStatusCodes array is provided
@@ -28,8 +31,8 @@ const __validateStatusCode = (res: Response, options: IOptions): void => {
       throw new Error(__buildUnexpectedCodeErrorMessage(res));
     }
   } else if (
-    res.status < options.acceptableStatusCodesRange.min
-    || res.status > options.acceptableStatusCodesRange.max
+    res.status < options.acceptableStatusCodesRange.min ||
+    res.status > options.acceptableStatusCodesRange.max
   ) {
     throw new Error(__buildUnexpectedCodeErrorMessage(res));
   }
@@ -47,10 +50,20 @@ const __validateContentType = (req: Request, res: Response) => {
   const reqAccept: string = <string>req.headers.get('Accept'); // reqs sent with this lib always have the Accept header
   const resContentType = res.headers.get('Content-Type');
   if (typeof resContentType !== 'string' || !resContentType.length) {
-    throw new Error(encodeError(`The response's Content-Type Header is invalid. Received: '${resContentType}'.`, ERRORS.INVALID_RESPONSE_CONTENT_TYPE));
+    throw new Error(
+      encodeError(
+        `The response's Content-Type Header is invalid. Received: '${resContentType}'.`,
+        ERRORS.INVALID_RESPONSE_CONTENT_TYPE,
+      ),
+    );
   }
   if (!resContentType.includes(reqAccept)) {
-    throw new Error(encodeError(`The request's Accept Header '${reqAccept}' is different to the Content-Type received in the response '${resContentType}'.`, ERRORS.CONTENT_TYPE_MISSMATCH));
+    throw new Error(
+      encodeError(
+        `The request's Accept Header '${reqAccept}' is different to the Content-Type received in the response '${resContentType}'.`,
+        ERRORS.CONTENT_TYPE_MISSMATCH,
+      ),
+    );
   }
 };
 
@@ -73,10 +86,6 @@ const validateResponse = (req: Request, res: Response, options: IOptions): void 
   // validate the content type
   __validateContentType(req, res);
 };
-
-
-
-
 
 /* ************************************************************************************************
  *                                         MODULE EXPORTS                                         *
