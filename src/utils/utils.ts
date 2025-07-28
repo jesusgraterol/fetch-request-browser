@@ -59,9 +59,10 @@ const __buildRequestHeaders = (headers: any, method: IRequestMethod): Headers =>
   } else if (headers instanceof Headers) {
     reqHeaders = headers;
   } else {
-    reqHeaders = method === 'GET'
-      ? new Headers({ Accept: 'application/json' })
-      : new Headers({ Accept: 'application/json', 'Content-Type': 'application/json' });
+    reqHeaders =
+      method === 'GET'
+        ? new Headers({ Accept: 'application/json' })
+        : new Headers({ Accept: 'application/json', 'Content-Type': 'application/json' });
   }
 
   // include the Accept Header in case it wasn't provided
@@ -141,10 +142,6 @@ const buildRequest = (input: IRequestInput, options?: Partial<IRequestOptions>):
   }
 };
 
-
-
-
-
 /* ************************************************************************************************
  *                                        RESPONSE HELPERS                                        *
  ************************************************************************************************ */
@@ -157,10 +154,7 @@ const buildRequest = (input: IRequestInput, options?: Partial<IRequestOptions>):
  * @throws
  * - INVALID_RESPONSE_DTYPE: if the data type is not supported by the Response Instance
  */
-const extractResponseData = async <T>(
-  res: Response,
-  dType: IResponseDataType,
-): Promise<T> => {
+const extractResponseData = async <T>(res: Response, dType: IResponseDataType): Promise<T> => {
   switch (dType) {
     case 'arrayBuffer': {
       return res.arrayBuffer() as T;
@@ -178,7 +172,12 @@ const extractResponseData = async <T>(
       return res.text() as T;
     }
     default: {
-      throw new Error(encodeError(`The provided response data type '${dType}' is invalid.`, ERRORS.INVALID_RESPONSE_DTYPE));
+      throw new Error(
+        encodeError(
+          `The provided response data type '${dType}' is invalid.`,
+          ERRORS.INVALID_RESPONSE_DTYPE,
+        ),
+      );
     }
   }
 };
@@ -200,10 +199,6 @@ const extractErrorMessageFromResponseBody = async (res: Response): Promise<strin
   }
 };
 
-
-
-
-
 /* ************************************************************************************************
  *                                          MISC HELPERS                                          *
  ************************************************************************************************ */
@@ -220,10 +215,6 @@ const buildOptions = (options: Partial<IOptions> = {}): IOptions => ({
   acceptableStatusCodesRange: options.acceptableStatusCodesRange ?? { min: 200, max: 299 },
   skipStatusCodeValidation: options.skipStatusCodeValidation ?? false,
 });
-
-
-
-
 
 /* ************************************************************************************************
  *                                         MODULE EXPORTS                                         *
