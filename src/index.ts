@@ -13,6 +13,7 @@ import {
 import {
   buildOptions,
   buildRequest,
+  isRequestRetryable,
   extractErrorMessageFromResponseBody,
   extractResponseData,
 } from './utils/utils.js';
@@ -94,8 +95,8 @@ const send = async <T>(
   try {
     return await __executeSend<T>(input, options);
   } catch (e) {
-    // rethrow the err if there are no attempts left or the HTTP status code is 429 (too many reqs)
-    if (extractMessage(e).includes('429') || !isArrayValid(retryDelaySchedule)) {
+    // rethrow the err if there are no attempts left or the HTTP status code is not retryable
+    if (!isArrayValid(retryDelaySchedule) || !isRequestRetryable(e)) {
       throw e;
     }
     await delay(retryDelaySchedule[0]);
@@ -110,7 +111,7 @@ const send = async <T>(
  * worth retrying as they could fail temporarily and prevent a view from loading.
  * @param input
  * @param options?
- * @param retryDelaySchedule? - list of seconds that will be applied to the delay before retrying
+ * @param retryDelaySchedule? - list of seconds that will be applied to the delay before retrying (Defaults to [3, 5])
  * @returns Promise<IRequestResponse>
  * @throws
  * - INVALID_REQUEST_URL: if the provided input URL cannot be parsed
@@ -124,7 +125,7 @@ const send = async <T>(
 const sendGET = <T>(
   input: IRequestInput,
   options?: Partial<IOptions>,
-  retryDelaySchedule?: number[],
+  retryDelaySchedule: number[] = [3, 5],
 ): Promise<IRequestResponse<T>> =>
   send<T>(
     input,
@@ -142,7 +143,7 @@ const sendGET = <T>(
  * Builds and sends a POST HTTP Request based on the provided input and options.
  * @param input
  * @param options?
- * @param retryDelaySchedule? - list of seconds that will be applied to the delay before retrying
+ * @param retryDelaySchedule? - list of seconds that will be applied to the delay before retrying. (Defaults to undefined)
  * @returns Promise<IRequestResponse>
  * @throws
  * - INVALID_REQUEST_URL: if the provided input URL cannot be parsed
@@ -174,7 +175,7 @@ const sendPOST = <T>(
  * Builds and sends a PUT HTTP Request based on the provided input and options.
  * @param input
  * @param options?
- * @param retryDelaySchedule? - list of seconds that will be applied to the delay before retrying
+ * @param retryDelaySchedule? - list of seconds that will be applied to the delay before retrying. (Defaults to undefined)
  * @returns Promise<IRequestResponse>
  * @throws
  * - INVALID_REQUEST_URL: if the provided input URL cannot be parsed
@@ -206,7 +207,7 @@ const sendPUT = <T>(
  * Builds and sends a PATCH HTTP Request based on the provided input and options.
  * @param input
  * @param options?
- * @param retryDelaySchedule? - list of seconds that will be applied to the delay before retrying
+ * @param retryDelaySchedule? - list of seconds that will be applied to the delay before retrying. (Defaults to undefined)
  * @returns Promise<IRequestResponse>
  * @throws
  * - INVALID_REQUEST_URL: if the provided input URL cannot be parsed
@@ -238,7 +239,7 @@ const sendPATCH = <T>(
  * Builds and sends a DELETE HTTP Request based on the provided input and options.
  * @param input
  * @param options?
- * @param retryDelaySchedule? - list of seconds that will be applied to the delay before retrying
+ * @param retryDelaySchedule? - list of seconds that will be applied to the delay before retrying. (Defaults to undefined)
  * @returns Promise<IRequestResponse>
  * @throws
  * - INVALID_REQUEST_URL: if the provided input URL cannot be parsed

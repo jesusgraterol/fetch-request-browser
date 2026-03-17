@@ -4,6 +4,7 @@ import { ERRORS } from '../shared/errors.js';
 import {
   buildOptions,
   buildRequest,
+  isRequestRetryable,
   extractErrorMessageFromResponseBody,
   extractResponseData,
 } from './utils.js';
@@ -169,6 +170,29 @@ describe('buildRequest', () => {
     expect(() =>
       buildRequest('https://www.mozilla.org', { mode: <RequestMode>'invalid-mode' }),
     ).toThrowError(ERRORS.INVALID_REQUEST_OPTIONS);
+  });
+});
+
+describe('isRequestRetryable', () => {
+  test.each([
+    [undefined, true],
+    [null, true],
+    [{}, true],
+    [{ retryable: true }, true],
+    [{ retryable: false }, true],
+    [{ retryable: false }, true],
+    [`Request Failed: received unexpected response code '400': Error!`, true],
+    [new Error(`Request Failed: received unexpected response code '400': Error!`), true],
+    [`Request Failed: received unexpected response code '401': Error!`, false],
+    [new Error(`Request Failed: received unexpected response code '401': Error!`), false],
+    [`Request Failed: received unexpected response code '403': Error!`, false],
+    [new Error(`Request Failed: received unexpected response code '403': Error!`), false],
+    [`Request Failed: received unexpected response code '404': Error!`, false],
+    [new Error(`Request Failed: received unexpected response code '404': Error!`), false],
+    [`Request Failed: received unexpected response code '429': Error!`, false],
+    [new Error(`Request Failed: received unexpected response code '429': Error!`), false],
+  ])('isRequestRetryable(%o) -> %s', (opts, expected) => {
+    expect(isRequestRetryable(opts)).toBe(expected);
   });
 });
 
