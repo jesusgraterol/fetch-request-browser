@@ -142,6 +142,26 @@ const buildRequest = (input: IRequestInput, options?: Partial<IRequestOptions>):
   }
 };
 
+/**
+ * Extracts the error message from the error object and checks if it is retryable based on the
+ * status code included in the message. The list of non-retryable status codes includes:
+ * - 401: Unauthorized
+ * - 403: Forbidden
+ * - 404: Not Found
+ * - 429: Too Many Requests
+ * @param error The error object thrown by the fetch request or the validation functions
+ * @returns boolean indicating whether the request is retryable or not
+ */
+const isRequestRetryable = (error: unknown): boolean => {
+  const errorMessage = extractMessage(error);
+  return (
+    !errorMessage.includes('401') &&
+    !errorMessage.includes('403') &&
+    !errorMessage.includes('404') &&
+    !errorMessage.includes('429')
+  );
+};
+
 /* ************************************************************************************************
  *                                        RESPONSE HELPERS                                        *
  ************************************************************************************************ */
@@ -222,6 +242,7 @@ const buildOptions = (options: Partial<IOptions> = {}): IOptions => ({
 export {
   // request helpers
   buildRequest,
+  isRequestRetryable,
 
   // response helpers
   extractResponseData,

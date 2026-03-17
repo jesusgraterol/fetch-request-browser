@@ -582,6 +582,9 @@ await sendPOST<IHTTPBinResponse>(
 ## Running the Tests
 
 ```bash
+# unit and integration tests
+npm run test
+
 # unit tests
 npm run test:unit
 

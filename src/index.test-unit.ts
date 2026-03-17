@@ -92,5 +92,40 @@ describe('fetch-request', () => {
       await vi.advanceTimersByTimeAsync(36 * 1000); // cleared - should not call send again
       expect(fetch).toHaveBeenCalledTimes(4);
     });
+
+    test('the retry mechanism is triggered if the request is retryable', async () => {
+      vi.useFakeTimers();
+      vi.stubGlobal(
+        'fetch',
+        vi
+          .fn()
+          .mockImplementationOnce(() => Promise.resolve({ status: 401 }))
+          .mockImplementationOnce(() => Promise.resolve({ status: 401 }))
+          .mockImplementationOnce(() => Promise.resolve({ status: 401 }))
+          .mockImplementationOnce(() =>
+            Promise.resolve({
+              status: 200,
+              headers: new Headers({ 'Content-Type': 'application/json' }),
+              json: () => Promise.resolve({}),
+            }),
+          ),
+      );
+      expect(fetch).not.toHaveBeenCalled();
+
+      await expect(sendGET('https://www.google.com', undefined, [3, 5, 10])).rejects.toThrow();
+      expect(fetch).toHaveBeenCalledTimes(1);
+
+      await vi.advanceTimersByTimeAsync(4 * 1000);
+      expect(fetch).toHaveBeenCalledTimes(1);
+
+      await vi.advanceTimersByTimeAsync(8 * 1000);
+      expect(fetch).toHaveBeenCalledTimes(1);
+
+      await vi.advanceTimersByTimeAsync(18 * 1000);
+      expect(fetch).toHaveBeenCalledTimes(1);
+
+      await vi.advanceTimersByTimeAsync(36 * 1000);
+      expect(fetch).toHaveBeenCalledTimes(1);
+    });
   });
 });
